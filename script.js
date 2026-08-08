@@ -3,8 +3,8 @@
    Edit the values in WEDDING to update the site.
    ========================================================= */
 const WEDDING = {
-  groom: "Nhiejay",
-  bride: "Lhyn",
+  groom: "Nhiejay Lintag",
+  bride: "Lhyn Manalansan",
   displayNames: "Nhiejay & Lhyn",
   date: "August 29, 2026",
   dateTime: "2026-08-29T09:00:00+08:00",
