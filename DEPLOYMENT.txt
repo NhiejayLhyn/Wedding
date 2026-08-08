@@ -1,0 +1,7 @@
+# Quick GitHub Pages checklist
+
+1. Create a GitHub repository.
+2. Upload everything in this folder, including `assets/`.
+3. Settings → Pages → Deploy from branch → `main` → `/ (root)` → Save.
+4. Open the generated Pages URL on mobile.
+5. Update `script.js` with the real RSVP link before sharing.

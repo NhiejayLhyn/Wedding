@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#191970">
+  <meta name="description" content="Join Nhiejay & Lhyn as they celebrate their wedding on August 29, 2026.">
+  <meta property="og:title" content="Nhiejay & Lhyn | Wedding Invitation">
+  <meta property="og:description" content="Join Nhiejay & Lhyn as they celebrate their wedding on August 29, 2026.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/couple-photo.jpg">
+  <meta property="og:url" content="">
+  <title>Nhiejay & Lhyn | Wedding Invitation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to invitation</a>
+
+  <!-- CINEMATIC OPENING -->
+  <section class="opening" id="opening" aria-label="Wedding invitation opening">
+    <video class="opening__video" autoplay muted loop playsinline preload="metadata" poster="assets/video-poster.jpg">
+      <source src="assets/wedding-video.mp4" type="video/mp4">
+    </video>
+    <div class="opening__veil" aria-hidden="true"></div>
+    <div class="opening__content">
+      <p class="eyebrow eyebrow--light">A celebration of love</p>
+      <h1>Nhiejay <span>&amp;</span> Lhyn</h1>
+      <p class="opening__subtitle">We're Getting Married</p>
+      <p class="opening__date">August 29, 2026</p>
+      <button class="open-button" id="openInvitation" type="button">
+        <span>Open Invitation</span>
+        <span class="open-button__arrow" aria-hidden="true">↓</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN INVITATION -->
+  <div class="site-shell" id="invitation">
+    <header class="site-header" id="siteHeader">
+      <a class="brand" href="#home" aria-label="Nhiejay and Lhyn home">
+        <span>NL</span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu">
+        <span class="sr-only">Open menu</span>
+        <span></span><span></span>
+      </button>
+      <nav class="desktop-nav" aria-label="Primary navigation">
+        <a href="#home">Home</a>
+        <a href="#story">Our Story</a>
+        <a href="#the-day">The Day</a>
+        <a href="#dress-code">Dress Code</a>
+        <a href="#rsvp">RSVP</a>
+      </nav>
+      <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
+        <a href="#home">Home</a>
+        <a href="#story">Our Story</a>
+        <a href="#the-day">The Day</a>
+        <a href="#dress-code">Dress Code</a>
+        <a href="#rsvp">RSVP</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <!-- HERO -->
+      <section class="hero section" id="home">
+        <div class="hero__ornament" aria-hidden="true">NL</div>
+        <p class="eyebrow reveal">Together with their families</p>
+        <h2 class="names reveal">Nhiejay Lintag <span>&amp;</span> Lhyn Manalansan</h2>
+        <p class="hero__copy reveal">joyfully invite you to celebrate their wedding</p>
+        <div class="hero__date reveal">
+          <span>August 29</span>
+          <i></i>
+          <span>2026</span>
+        </div>
+        <p class="hero__time reveal">9:00 AM</p>
+      </section>
+
+      <!-- COUPLE PHOTO -->
+      <section class="photo-section section section--tight">
+        <figure class="couple-card reveal">
+          <img src="assets/couple-photo.jpg" alt="Illustrated portrait of Nhiejay and Lhyn dressed for their wedding" loading="eager" decoding="async">
+        </figure>
+      </section>
+
+      <!-- COUNTDOWN -->
+      <section class="countdown-section section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Until we say “I do”</p>
+          <h2>Counting Down to Forever</h2>
+        </div>
+        <div class="countdown" id="countdown" aria-live="polite">
+          <div class="countdown__unit"><strong data-unit="days">--</strong><span>Days</span></div>
+          <div class="countdown__unit"><strong data-unit="hours">--</strong><span>Hours</span></div>
+          <div class="countdown__unit"><strong data-unit="minutes">--</strong><span>Minutes</span></div>
+          <div class="countdown__unit"><strong data-unit="seconds">--</strong><span>Seconds</span></div>
+        </div>
+        <p class="countdown__complete" id="countdownComplete" hidden>Today is the day!</p>
+      </section>
+
+      <!-- THE DAY -->
+      <section class="details section" id="the-day">
+        <div class="section-heading reveal">
+          <p class="eyebrow">The day</p>
+          <h2>Wedding Details</h2>
+          <p>Everything you need for the celebration, in one place.</p>
+        </div>
+
+        <article class="event-card reveal">
+          <span class="event-card__number">01</span>
+          <p class="eyebrow">Ceremony</p>
+          <h3>Minor Basilica and Shrine Parish of Our Lady of the Rosary of Orani</h3>
+          <p class="event-card__time">9:00 AM</p>
+          <p>Orani, Bataan, Philippines</p>
+          <a class="button button--outline" target="_blank" rel="noopener noreferrer"
+             href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Shrine+Parish+of+Our+Lady+of+the+Rosary+of+Orani%2C+Orani%2C+Bataan%2C+Philippines">
+            Get Directions
+          </a>
+        </article>
+
+        <article class="event-card reveal">
+          <span class="event-card__number">02</span>
+          <p class="eyebrow">Reception</p>
+          <h3>Clubhouse Coastal Grove</h3>
+          <p class="event-card__time">Following the Ceremony</p>
+          <p>Kaparangan, Orani, Bataan, Philippines</p>
+          <a class="button button--outline" target="_blank" rel="noopener noreferrer"
+             href="https://www.google.com/maps/search/?api=1&query=Clubhouse+Coastal+Grove%2C+Kaparangan%2C+Orani%2C+Bataan%2C+Philippines">
+            Get Directions
+          </a>
+        </article>
+
+        <div class="mini-timeline reveal">
+          <div><strong>9:00 AM</strong><span>Wedding Ceremony</span></div>
+          <div><span class="timeline-line" aria-hidden="true"></span></div>
+          <div><strong>Following the Ceremony</strong><span>Reception</span></div>
+        </div>
+      </section>
+
+      <!-- DRESS CODE -->
+      <section class="dress section" id="dress-code">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Dress code</p>
+          <h2>Midnight Blue</h2>
+          <p>We kindly invite our guests to dress in Midnight Blue.</p>
+        </div>
+        <div class="dress-swatch reveal" role="img" aria-label="Midnight blue color swatch">
+          <span>#191970</span>
+        </div>
+      </section>
+
+      <!-- OUR STORY -->
+      <section class="story section" id="story">
+        <div class="section-heading reveal">
+          <p class="eyebrow">Our story</p>
+          <h2>Where It All Began</h2>
+          <p>This space is ready for Nhiejay &amp; Lhyn's story. Add your personal story here when you're ready.</p>
+        </div>
+        <div class="story-note reveal">
+          <span>NL</span>
+          <p>A beautiful beginning. A shared journey. A lifetime ahead.</p>
+        </div>
+      </section>
+
+      <!-- INVITATION SUITE / PROVIDED IMAGES -->
+      <section class="gallery section">
+        <div class="section-heading reveal">
+          <p class="eyebrow">The invitation suite</p>
+          <h2>Details to Cherish</h2>
+        </div>
+        <div class="gallery-grid">
+          <figure class="gallery-item gallery-item--large reveal">
+            <img src="assets/invitation-cover.jpg" alt="Wedding invitation cover for Nhiejay and Lhyn" loading="lazy">
+          </figure>
+          <figure class="gallery-item reveal">
+            <img src="assets/invitation-entourage.jpg" alt="Wedding entourage details from the invitation" loading="lazy">
+          </figure>
+          <figure class="gallery-item reveal">
+            <img src="assets/invitation-sponsors.jpg" alt="Wedding sponsors details from the invitation" loading="lazy">
+          </figure>
+        </div>
+      </section>
+
+      <!-- RSVP -->
+      <section class="rsvp section" id="rsvp">
+        <div class="rsvp__inner reveal">
+          <p class="eyebrow">Kindly reply</p>
+          <h2>RSVP</h2>
+          <p>We would be honored to celebrate this special day with you.</p>
+          <a class="button button--solid button--large" href="YOUR_RSVP_LINK_HERE" id="rsvpButton">RSVP Now</a>
+          <p class="rsvp__note">RSVP link can be updated in <code>script.js</code>.</p>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="footer">
+        <img src="assets/monogram.png" alt="" class="footer__monogram" loading="lazy">
+        <p class="footer__names">Nhiejay &amp; Lhyn</p>
+        <p>August 29, 2026</p>
+        <p class="footer__love">With love, Nhiejay &amp; Lhyn</p>
+      </footer>
+    </main>
+
+    <div class="mobile-actions" aria-label="Quick wedding actions">
+      <a href="#rsvp">RSVP</a>
+      <a target="_blank" rel="noopener noreferrer" href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Shrine+Parish+of+Our+Lady+of+the+Rosary+of+Orani%2C+Orani%2C+Bataan%2C+Philippines">Directions</a>
+    </div>
+  </div>
+
+  <button class="music-toggle" id="musicToggle" type="button" aria-pressed="false" aria-label="Toggle background music" hidden>
+    <span aria-hidden="true">♪</span>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
