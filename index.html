@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#091426">
+<meta name="description" content="Wedding invitation of Lyn Manalansan and Niño Lintag — August 29, 2026.">
+<title>Lyn & Niño | Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#091426;
+  --navy2:#0d1c31;
+  --navy3:#132641;
+  --ivory:#f7f3ea;
+  --gold:#c8a96b;
+  --gold2:#e0c98e;
+  --muted:#b8bcc4;
+  --line:rgba(200,169,107,.34);
+  --white-line:rgba(247,243,234,.16);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--navy);color:var(--ivory);
+  font-family:Montserrat,Arial,sans-serif;font-weight:300;line-height:1.7;
+}
+body.locked{overflow:hidden}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+h1,h2,h3,.serif{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500}
+.section{padding:105px 22px;position:relative}
+.wrap{width:min(1080px,100%);margin:auto}
+.center{text-align:center}
+.eyebrow{
+  color:var(--gold);font-size:.67rem;letter-spacing:.30em;
+  text-transform:uppercase;margin-bottom:14px
+}
+.title{font-size:clamp(2.8rem,7vw,5rem);line-height:1.02;margin:0 0 22px}
+.copy{max-width:700px;margin:0 auto;color:#d6d4ce}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:14px;
+  min-height:48px;padding:12px 24px;border:1px solid var(--gold);
+  background:transparent;color:var(--ivory);letter-spacing:.18em;
+  text-transform:uppercase;font-size:.66rem;transition:.3s;
+}
+.btn:hover{background:var(--gold);color:var(--navy)}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.gold:hover{background:var(--gold2)}
+.ornament{color:var(--gold);font-size:1.35rem;margin:16px 0}
+
+/* OPENING */
+#opening{
+  position:fixed;inset:0;z-index:1000;background:#050d18;
+  display:grid;place-items:center;overflow:hidden;
+  transition:opacity .8s ease,visibility .8s ease;
+}
+#opening.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.opening-video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;
+}
+.opening-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(5,13,24,.20),rgba(5,13,24,.32)),
+             linear-gradient(0deg,rgba(5,13,24,.55),rgba(5,13,24,.08) 55%,rgba(5,13,24,.22));
+}
+.opening-ui{
+  position:absolute;z-index:2;bottom:8vh;right:6vw;
+  text-align:right;
+}
+.opening-line{
+  width:80px;height:1px;background:var(--gold);margin:0 0 22px auto;
+}
+.opening-ui .btn{
+  min-width:250px;
+  background:rgba(9,20,38,.45);
+  backdrop-filter:blur(8px);
+}
+.opening-ui .btn:hover{background:var(--gold)}
+.scroll-hint{
+  position:absolute;z-index:2;bottom:27px;left:50%;
+  transform:translateX(-50%);font-size:.61rem;letter-spacing:.25em;
+  text-transform:uppercase;color:rgba(247,243,234,.85);white-space:nowrap;
+}
+.scroll-hint span{display:block;text-align:center;font-size:1.2rem;line-height:1;margin-top:5px;color:var(--gold)}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  height:64px;display:flex;align-items:center;justify-content:center;gap:28px;
+  padding:0 18px;background:rgba(5,13,24,.82);
+  backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,169,107,.14);
+}
+.nav a{
+  color:#d7d6d2;font-size:.59rem;letter-spacing:.16em;
+  text-transform:uppercase;transition:.2s;
+}
+.nav a:hover,.nav a.active{color:var(--gold)}
+.nav-monogram{
+  position:absolute;left:24px;color:var(--gold);
+  font-family:"Cormorant Garamond";font-size:1.55rem;letter-spacing:.12em;
+}
+.nav-music{
+  position:absolute;right:20px;background:none;border:0;color:var(--gold);
+  font-size:1.05rem;
+}
+
+/* HERO */
+.hero{
+  min-height:100svh;display:grid;place-items:center;text-align:center;
+  position:relative;overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#1b3150 0,#091426 58%,#050d18 100%);
+}
+.hero:before,.hero:after{
+  content:"";position:absolute;border:1px solid var(--line);
+  border-radius:50%;width:min(80vw,900px);height:min(80vw,900px);
+  opacity:.55;
+}
+.hero:after{width:min(60vw,680px);height:min(60vw,680px)}
+.hero-content{position:relative;z-index:2;padding:70px 20px 30px}
+.hero-names{font-family:"Cormorant Garamond";font-size:clamp(4.8rem,14vw,9rem);line-height:.72}
+.hero-names .amp{font-size:.42em;color:var(--gold);display:block;margin:22px 0}
+.hero-date{margin-top:28px;font-size:.72rem;letter-spacing:.26em;text-transform:uppercase}
+.hero-sub{color:var(--muted);margin-top:10px;font-size:.78rem}
+.hero-actions{margin-top:30px}
+
+/* INTRO */
+.intro{background:var(--ivory);color:var(--navy)}
+.intro .copy{color:#4b5563}
+.intro .title{color:var(--navy)}
+
+/* DETAILS */
+.details{background:var(--navy)}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:48px}
+.card{
+  border:1px solid var(--line);padding:40px 28px;text-align:center;
+  background:rgba(255,255,255,.018)
+}
+.card-icon{color:var(--gold);font-size:1.25rem}
+.card .time{color:var(--gold);font-size:.68rem;letter-spacing:.19em;text-transform:uppercase;margin-top:9px}
+.card h3{font-size:2.35rem;margin:8px 0}
+.card p{color:#d1d0ca;min-height:82px}
+
+/* COUNTDOWN */
+.countdown{background:var(--navy2);text-align:center}
+.count-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  max-width:800px;margin:50px auto 0
+}
+.count-box{padding:12px;border-left:1px solid var(--line)}
+.count-box:first-child{border-left:0}
+.count-number{font-family:"Cormorant Garamond";font-size:4rem;line-height:1;color:var(--gold2)}
+.count-label{margin-top:6px;color:var(--muted);font-size:.59rem;letter-spacing:.2em;text-transform:uppercase}
+
+/* STORY */
+.story{background:linear-gradient(180deg,var(--navy),#0b1a2e)}
+.story-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.story-frame{
+  aspect-ratio:4/5;border:1px solid var(--line);
+  display:grid;place-items:center;
+  background:linear-gradient(135deg,#172b47,#0a1526)
+}
+.story-frame span{font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.story-text p{color:#d2d0ca}
+
+/* ENTOURAGE */
+.entourage{background:var(--ivory);color:var(--navy)}
+.entourage .copy{color:#59616b}
+.people{display:grid;grid-template-columns:repeat(3,1fr);gap:0 18px;margin-top:42px}
+.person{padding:20px;border-bottom:1px solid rgba(9,20,38,.14);text-align:center}
+.role{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:#6c7178}
+.person h3{font-size:1.55rem;margin:4px 0}
+
+/* DRESS */
+.dress{text-align:center}
+.palette{display:flex;justify-content:center;margin:35px 0 24px}
+.swatch{
+  width:72px;height:72px;border-radius:50%;
+  border:4px solid var(--navy);box-shadow:0 0 0 1px var(--gold)
+}
+.swatch:nth-child(1){background:#091426}
+.swatch:nth-child(2){background:#1c3555;margin-left:-10px}
+.swatch:nth-child(3){background:#c8a96b;margin-left:-10px}
+.swatch:nth-child(4){background:#f7f3ea;margin-left:-10px}
+
+/* MAP */
+.map{
+  width:100%;height:380px;border:1px solid var(--line);margin-top:42px;
+  filter:saturate(.55) contrast(1.05)
+}
+
+/* RSVP */
+.rsvp{background:var(--navy2)}
+.form{max-width:680px;margin:42px auto 0}
+.field{margin-bottom:17px}
+label{
+  display:block;color:var(--muted);font-size:.61rem;
+  letter-spacing:.16em;text-transform:uppercase;margin-bottom:7px
+}
+input,select,textarea{
+  width:100%;padding:13px 14px;background:#091426;color:var(--ivory);
+  border:1px solid var(--white-line);outline:0
+}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:110px;resize:vertical}
+.notice{text-align:center;color:var(--gold);margin-top:17px;min-height:24px;font-size:.78rem}
+
+/* GALLERY */
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:42px}
+.photo{
+  aspect-ratio:1/1;border:1px solid var(--line);
+  display:grid;place-items:center;background:linear-gradient(135deg,#1a2d48,#091426);
+  color:var(--muted);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;
+  overflow:hidden
+}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* FOOTER */
+.footer{
+  padding:100px 20px;text-align:center;background:#050d18;
+  border-top:1px solid var(--line)
+}
+.footer-names{font-family:"Cormorant Garamond";font-size:clamp(3.8rem,11vw,7rem);line-height:.75}
+.footer-names .amp{display:block;color:var(--gold);font-size:.4em;margin:22px 0}
+.small{font-size:.61rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .85s ease,transform .85s ease}
+.reveal.show{opacity:1;transform:none}
+
+/* MUSIC */
+.music-fab{
+  position:fixed;right:20px;bottom:20px;z-index:60;width:50px;height:50px;
+  border-radius:50%;border:1px solid var(--gold);background:rgba(9,20,38,.9);
+  color:var(--gold);font-size:1rem
+}
+.music-fab.playing{box-shadow:0 0 0 5px rgba(200,169,107,.08)}
+
+/* RESPONSIVE */
+@media(max-width:760px){
+  .nav{height:58px;justify-content:flex-start;overflow-x:auto;padding-left:80px;padding-right:50px;gap:20px}
+  .nav-monogram{left:17px}
+  .nav-music{right:12px}
+  .section{padding:80px 18px}
+  .cards,.story-layout{grid-template-columns:1fr}
+  .people{grid-template-columns:1fr 1fr}
+  .count-grid{grid-template-columns:repeat(2,1fr)}
+  .count-box:nth-child(3),.count-box:nth-child(4){border-top:1px solid var(--line)}
+  .count-box:nth-child(3){border-left:0}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .opening-ui{bottom:11vh;right:20px}
+  .opening-ui .btn{min-width:215px}
+  .hero-content{padding-top:80px}
+}
+@media(max-width:480px){
+  .people{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .hero-names{font-size:clamp(4.2rem,22vw,6rem)}
+}
+</style>
+</head>
+
+<body class="locked">
+
+<!-- OPENING: the uploaded video is the visual. No Lyn & Niño text is placed over it. -->
+<div id="opening">
+  <video class="opening-video" autoplay muted loop playsinline preload="auto">
+    <source src="opening.mp4" type="video/mp4">
+  </video>
+  <div class="opening-overlay"></div>
+
+  <div class="opening-ui">
+    <div class="opening-line"></div>
+    <button class="btn" id="openInvitation">Open Invitation <span>→</span></button>
+  </div>
+
+  <div class="scroll-hint">Scroll to begin<span>⌄</span></div>
+</div>
+
+<nav class="nav">
+  <a class="nav-monogram" href="#home">L&nbsp;|&nbsp;N</a>
+  <a href="#home">Home</a>
+  <a href="#story">Our Story</a>
+  <a href="#wedding">The Wedding</a>
+  <a href="#entourage">Entourage</a>
+  <a href="#details">Details</a>
+  <a href="#rsvp">RSVP</a>
+  <a href="#gallery">Gallery</a>
+  <button class="nav-music" id="navMusic" aria-label="Play music">♫</button>
+</nav>
+
+<main>
+<section class="hero" id="home">
+  <div class="hero-content reveal">
+    <div class="eyebrow">The Wedding of</div>
+    <div class="hero-names">
+      Lyn
+      <span class="amp">&amp;</span>
+      Niño
+    </div>
+    <div class="ornament">✦</div>
+    <div class="hero-date">Saturday · August 29, 2026 · 9:00 AM</div>
+    <div class="hero-sub">Orani, Bataan</div>
+    <div class="hero-actions"><a class="btn" href="#wedding">Explore Invitation</a></div>
+  </div>
+</section>
+
+<section class="section intro" id="story">
+  <div class="wrap center reveal">
+    <div class="eyebrow">A Celebration of Love</div>
+    <h2 class="title">Two hearts, one beautiful beginning.</h2>
+    <p class="copy">
+      With grateful hearts and surrounded by the people they love,
+      Lyn Manalansan and Niño Lintag invite you to share in the joy of
+      their wedding day.
+    </p>
+    <div class="ornament">✦</div>
+  </div>
+</section>
+
+<section class="section details" id="wedding">
+  <div class="wrap center reveal">
+    <div class="eyebrow">The Wedding Day</div>
+    <h2 class="title">Join us as we say “I do.”</h2>
+
+    <div class="cards">
+      <article class="card">
+        <div class="card-icon">✦</div>
+        <div class="time">9:00 AM</div>
+        <h3>Ceremony</h3>
+        <p>
+          Minor Basilica and Shrine Parish of Our Lady of the Rosary of Orani<br>
+          Orani, Bataan
+        </p>
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/search/?api=1&query=Minor+Basilica+and+Shrine+Parish+of+Our+Lady+of+the+Rosary+of+Orani">
+          Get Directions
+        </a>
+      </article>
+
+      <article class="card">
+        <div class="card-icon">✦</div>
+        <div class="time">Following the Ceremony</div>
+        <h3>Reception</h3>
+        <p>
+          Coastal Grove<br>
+          Kaparangan, Orani, Bataan
+        </p>
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/search/?api=1&query=Coastal+Grove+Kaparangan+Orani+Bataan">
+          Get Directions
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section countdown">
+  <div class="wrap center reveal">
+    <div class="eyebrow">Until We Say I Do</div>
+    <h2 class="title">The countdown begins.</h2>
+    <div class="count-grid">
+      <div class="count-box"><div class="count-number" id="days">0</div><div class="count-label">Days</div></div>
+      <div class="count-box"><div class="count-number" id="hours">0</div><div class="count-label">Hours</div></div>
+      <div class="count-box"><div class="count-number" id="minutes">0</div><div class="count-label">Minutes</div></div>
+      <div class="count-box"><div class="count-number" id="seconds">0</div><div class="count-label">Seconds</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section story">
+  <div class="wrap story-layout">
+    <div class="story-frame reveal">
+      <span>Replace with your favorite photo</span>
+    </div>
+    <div class="story-text reveal">
+      <div class="eyebrow">Our Story</div>
+      <h2 class="title">A journey worth celebrating.</h2>
+      <p>
+        Every love story is made of little moments, shared dreams, laughter,
+        challenges, and memories. This space is ready for your personal story.
+      </p>
+      <p>
+        Replace this paragraph with how Lyn and Niño met, a favorite memory,
+        the proposal story, or anything you would like your guests to know.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section entourage" id="entourage">
+  <div class="wrap center reveal">
+    <div class="eyebrow">Our Wedding Party</div>
+    <h2 class="title">With the people we love.</h2>
+    <p class="copy">Replace the placeholders below with your actual entourage names.</p>
+
+    <div class="people">
+      <div class="person"><div class="role">Parents of the Bride</div><h3>Parent Name</h3></div>
+      <div class="person"><div class="role">Parents of the Groom</div><h3>Parent Name</h3></div>
+      <div class="person"><div class="role">Maid of Honor</div><h3>Name</h3></div>
+      <div class="person"><div class="role">Best Man</div><h3>Name</h3></div>
+      <div class="person"><div class="role">Bridesmaid</div><h3>Name</h3></div>
+      <div class="person"><div class="role">Groomsman</div><h3>Name</h3></div>
+    </div>
+  </div>
+</section>
+
+<section class="section dress" id="details">
+  <div class="wrap center reveal">
+    <div class="eyebrow">Dress Code</div>
+    <h2 class="title">Elegant &amp; Refined</h2>
+    <div class="palette">
+      <div class="swatch" title="Midnight Blue"></div>
+      <div class="swatch" title="Navy"></div>
+      <div class="swatch" title="Muted Gold"></div>
+      <div class="swatch" title="Ivory"></div>
+    </div>
+    <p class="copy">
+      We invite our guests to dress in elegant formal or semi-formal attire.
+      Midnight blue, navy, ivory, and subtle neutral tones complement the celebration beautifully.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap center reveal">
+    <div class="eyebrow">Find Your Way</div>
+    <h2 class="title">Our celebration awaits.</h2>
+    <iframe class="map" loading="lazy"
+      src="https://www.google.com/maps?q=Orani%20Bataan&output=embed"
+      title="Map of Orani, Bataan"></iframe>
+  </div>
+</section>
+
+<section class="section rsvp" id="rsvp">
+  <div class="wrap center reveal">
+    <div class="eyebrow">Kindly Respond</div>
+    <h2 class="title">Will you celebrate with us?</h2>
+
+    <form class="form" id="rsvpForm">
+      <div class="field">
+        <label for="guest">Guest Name</label>
+        <input id="guest" required placeholder="Your full name">
+      </div>
+      <div class="field">
+        <label for="attendance">Attendance</label>
+        <select id="attendance" required>
+          <option value="">Please select</option>
+          <option>Joyfully accepts</option>
+          <option>Regretfully declines</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="guestCount">Number of Guests</label>
+        <select id="guestCount">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">Message (Optional)</label>
+        <textarea id="message" placeholder="A little message for the couple..."></textarea>
+      </div>
+      <button class="btn gold" type="submit">Submit RSVP</button>
+      <div class="notice" id="rsvpNotice"></div>
+    </form>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="wrap center reveal">
+    <div class="eyebrow">A Glimpse of Us</div>
+    <h2 class="title">Our Moments</h2>
+    <p class="copy">Replace these placeholders with your engagement and pre-wedding photographs.</p>
+    <div class="gallery-grid">
+      <div class="photo">Photo 01</div>
+      <div class="photo">Photo 02</div>
+      <div class="photo">Photo 03</div>
+      <div class="photo">Photo 04</div>
+      <div class="photo">Photo 05</div>
+      <div class="photo">Photo 06</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="eyebrow">Forever Starts Here</div>
+  <div class="footer-names">
+    Lyn
+    <span class="amp">&amp;</span>
+    Niño
+  </div>
+  <div class="small">August 29, 2026 · Orani, Bataan</div>
+  <div class="ornament">✦</div>
+  <div class="small">Thank you for being part of our story.</div>
+</footer>
+</main>
+
+<button class="music-fab" id="musicFab" aria-label="Toggle music">♫</button>
+<audio id="music" loop preload="none"></audio>
+
+<script>
+/* ============================================================
+   LYN & NIÑO — WEDDING INVITATION
+   ============================================================ */
+
+const OPENING = document.getElementById("opening");
+const OPEN_BUTTON = document.getElementById("openInvitation");
+
+OPEN_BUTTON.addEventListener("click", () => {
+  OPENING.classList.add("hidden");
+  document.body.classList.remove("locked");
+  window.scrollTo({top: 0, behavior: "instant"});
+});
+
+/* Countdown: August 29, 2026 at 9:00 AM Philippine time */
+const WEDDING_DATE = new Date("2026-08-29T09:00:00+08:00").getTime();
+
+function updateCountdown() {
+  const remaining = WEDDING_DATE - Date.now();
+
+  if (remaining <= 0) {
+    ["days","hours","minutes","seconds"].forEach(id => {
+      document.getElementById(id).textContent = "0";
+    });
+    return;
+  }
+
+  document.getElementById("days").textContent =
+    Math.floor(remaining / 86400000);
+
+  document.getElementById("hours").textContent =
+    Math.floor(remaining / 3600000) % 24;
+
+  document.getElementById("minutes").textContent =
+    Math.floor(remaining / 60000) % 60;
+
+  document.getElementById("seconds").textContent =
+    Math.floor(remaining / 1000) % 60;
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* Scroll reveal */
+const revealObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("show");
+    });
+  },
+  {threshold: 0.12}
+);
+
+document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
+
+/* Active navigation */
+const sections = document.querySelectorAll("main section[id]");
+const navLinks = document.querySelectorAll(".nav a[href^='#']");
+
+const navObserver = new IntersectionObserver(
+  entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach(link => link.classList.remove("active"));
+      const active = document.querySelector(`.nav a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add("active");
+    });
+  },
+  {rootMargin: "-35% 0px -55% 0px"}
+);
+
+sections.forEach(section => navObserver.observe(section));
+
+/* RSVP demo.
+   This stores the response in the visitor's browser.
+   Replace this handler with Google Forms/Sheets/Formspree
+   when you are ready for centralized RSVP collection.
+*/
+document.getElementById("rsvpForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const response = {
+    name: document.getElementById("guest").value.trim(),
+    attendance: document.getElementById("attendance").value,
+    guests: document.getElementById("guestCount").value,
+    message: document.getElementById("message").value.trim(),
+    submittedAt: new Date().toISOString()
+  };
+
+  localStorage.setItem("lynNinoRSVP", JSON.stringify(response));
+
+  document.getElementById("rsvpNotice").textContent =
+    `Thank you, ${response.name}. Your response has been recorded on this device.`;
+
+  event.target.reset();
+});
+
+/* Music.
+   Put your MP3 filename in the src below, e.g.:
+   const MUSIC_FILE = "wedding-song.mp3";
+*/
+const MUSIC_FILE = "";
+const music = document.getElementById("music");
+const musicButtons = [
+  document.getElementById("musicFab"),
+  document.getElementById("navMusic")
+];
+
+if (MUSIC_FILE) music.src = MUSIC_FILE;
+
+function toggleMusic() {
+  if (!MUSIC_FILE) {
+    alert("To enable music, set MUSIC_FILE in index.html to your MP3 filename.");
+    return;
+  }
+
+  if (music.paused) {
+    music.play();
+    musicButtons.forEach(btn => btn.classList.add("playing"));
+  } else {
+    music.pause();
+    musicButtons.forEach(btn => btn.classList.remove("playing"));
+  }
+}
+
+musicButtons.forEach(btn => btn.addEventListener("click", toggleMusic));
+</script>
+</body>
+</html>
