@@ -290,7 +290,7 @@ a{ color: inherit; text-decoration: none; }
 }
 
 @media (max-height: 700px){
-  .opening__stage{ width: min(100vw, 720px); }
+  .opening__stage{ width: min(100vw, 320px); }
   .opening__date{ margin: 6px 0 18px; }
 }
 
