@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/30856228/README.md)
 # Nhiejay & Lhyn — Wedding Invitation Website
 
 A mobile-first, single-page wedding invitation. Plain HTML/CSS/JS — no build step, no framework. Works as a static site anywhere (GitHub Pages, Netlify, Vercel, or any web host).
