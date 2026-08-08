@@ -884,7 +884,7 @@ a{ color: inherit; text-decoration: none; }
    TABLET / DESKTOP ENHANCEMENT (768px+)
    ========================================================= */
 @media (min-width: 768px){
-  .opening__stage{ width: min(30vw, 260px); }
+  .opening__stage{ width: min(80vw, 720px); }
 
   .day__cards{ flex-direction: row; align-items: stretch; max-width: 900px; gap: 0; }
   .day__card{ flex: 1; }
