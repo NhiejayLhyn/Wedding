@@ -211,7 +211,7 @@ a{ color: inherit; text-decoration: none; }
 .opening__video{
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 32 / 18;
   object-fit: contain;
   mix-blend-mode: multiply;
 }
