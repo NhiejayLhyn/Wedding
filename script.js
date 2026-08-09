@@ -33,6 +33,7 @@ const GALLERY = [
   { src: "gallery/3.jpg", alt: "Niejhay and Lhyn smiling together" }
   { src: "gallery/4.jpg", alt: "Niejhay and Lhyn smiling together" }
   { src: "gallery/5.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "gallery/6.jpg", alt: "Niejhay and Lhyn smiling together" }
 // { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
 ];
 
