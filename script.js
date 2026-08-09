@@ -28,7 +28,12 @@ const WEDDING = {
    --------------------------------------------------------- */
 const GALLERY = [
   { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" }
-  // { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
+  { src: "gallery/1.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "gallery/2.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "gallery/3.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "gallery/4.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "gallery/5.jpg", alt: "Niejhay and Lhyn smiling together" }
+// { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
