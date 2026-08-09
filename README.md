@@ -27,7 +27,7 @@ The opening screen uses `assets/wedding-video.mp4`. It's already compressed (720
 
 ## 2. Add / replace the couple photo
 
-Replace `assets/couple-photo.jpg` with your preferred photo (same filename), or update the `src` attributes in `index.html` (used in the hero photo section and the gallery section — two places).
+Replace `assets/couple-photo.jpg` with your preferred photo (same filename), or update the `src` attributes in `index.html` (used in the hero photo section — the gallery further down the page is a separate, expandable set of photos, see section 12).
 
 ## 3. Connect the RSVP form + Snap & Share to a Google Sheet / Drive
 
@@ -122,6 +122,25 @@ To swap the track:
 4. To remove background music entirely, delete the `<audio id="bgMusic">` block and the `.site-nav__music` button in `index.html`, and remove the `initMusic()` call in `script.js`.
 
 **A note on the provided track:** the uploaded file is a cover recording of a commercially copyrighted song. It's fine to use on a private wedding site shared with your own guests, but if you publish the site somewhere very public (a public GitHub Pages URL indexed by search engines, etc.), be aware platforms like YouTube/Facebook can flag copyrighted audio if the page is ever screen-recorded or shared into their systems. For full peace of mind, royalty-free wedding-appropriate tracks are widely available (e.g. via YouTube Audio Library or Epidemic Sound) if you'd rather swap it.
+
+## 12. Adding more photos to the gallery
+
+The "A Glimpse of Us" gallery is a tap-to-enlarge grid, driven by a list near the top of `script.js`:
+
+```js
+const GALLERY = [
+  { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" }
+  // { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
+];
+```
+
+To add a photo:
+
+1. Put the image file in `assets/gallery/` (this empty folder is already included — any filename works).
+2. Add a line to the `GALLERY` array above with its path and a short description (the description is read aloud by screen readers and shown if the image fails to load — describe what's happening in the photo).
+3. Save, and the grid + lightbox update automatically — no other file needs to change.
+
+Photos display in the order listed. There's no hard limit on how many you add, but for guests on mobile data, keep individual files reasonably sized (compress large phone photos to roughly 1500px on the long side / under ~500 KB each if you can — most photo apps or [squoosh.app](https://squoosh.app) can do this in a couple of taps).
 
 ## Notes
 

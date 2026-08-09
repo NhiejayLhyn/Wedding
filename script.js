@@ -19,6 +19,18 @@ const WEDDING = {
   hashtag: "#NiejhayAndLhynWedding2026" // shown on the Snap & Share section
 };
 
+/* ---------------------------------------------------------
+   GALLERY PHOTOS
+   Add a photo: drop the image file into assets/gallery/, then
+   add its path here as a new line. Order here is the order it
+   appears on the site. Each needs a short alt-text description
+   for accessibility (what's happening in the photo).
+   --------------------------------------------------------- */
+const GALLERY = [
+  { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" }
+  // { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
+];
+
 document.addEventListener("DOMContentLoaded", () => {
   initOpening();
   initNav();
@@ -27,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initRsvpForm();
   initSnapShare();
   initMusic();
+  initGallery();
 });
 
 /* ---------------------------------------------------------
@@ -434,4 +447,57 @@ function blobToBase64(blob){
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
+}
+
+/* ---------------------------------------------------------
+   Gallery grid + tap-to-enlarge lightbox
+   Renders the GALLERY array (defined near WEDDING config above)
+   into #galleryGrid, and opens a fullscreen view on tap.
+   --------------------------------------------------------- */
+function initGallery(){
+  const grid = document.getElementById("galleryGrid");
+  if (!grid) return;
+
+  if (!GALLERY.length) {
+    grid.innerHTML = '<p class="gallery__empty"><em>Photos coming soon.</em></p>';
+    return;
+  }
+
+  grid.innerHTML = GALLERY.map((photo, i) => `
+    <button type="button" class="gallery__item" data-index="${i}" aria-label="View photo: ${escapeHtml(photo.alt)}">
+      <img src="${photo.src}" alt="${escapeHtml(photo.alt)}" loading="lazy">
+    </button>
+  `).join("");
+
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const closeBtn = document.getElementById("lightboxClose");
+  if (!lightbox || !lightboxImg) return;
+
+  function openLightbox(index){
+    const photo = GALLERY[index];
+    if (!photo) return;
+    lightboxImg.src = photo.src;
+    lightboxImg.alt = photo.alt;
+    lightbox.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+  function closeLightbox(){
+    lightbox.hidden = true;
+    lightboxImg.src = "";
+    document.body.style.overflow = "";
+  }
+
+  grid.querySelectorAll(".gallery__item").forEach((btn) => {
+    btn.addEventListener("click", () => openLightbox(Number(btn.dataset.index)));
+  });
+  if (closeBtn) closeBtn.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !lightbox.hidden) closeLightbox(); });
+}
+
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str || "";
+  return div.innerHTML;
 }
