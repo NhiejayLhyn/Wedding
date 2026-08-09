@@ -28,11 +28,12 @@ const WEDDING = {
    --------------------------------------------------------- */
 const GALLERY = [
   { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/2.jpeg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/3.jpeg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/4.jpeg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/5.jpeg", alt: "Niejhay and Lhyn smiling together" }
-// { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
+  { src: "assets/gallery/gallery-1.jpg", alt: "Niejhay giving Lhyn a piggyback ride in front of the Grotto Cross memorial" },
+  { src: "assets/gallery/gallery-2.jpg", alt: "Niejhay and Lhyn laughing together during a piggyback ride at the Grotto Cross memorial" },
+  { src: "assets/gallery/gallery-3.jpg", alt: "Niejhay and Lhyn smiling together inside the church, Lhyn holding a bouquet of red roses" },
+  { src: "assets/gallery/gallery-4.jpg", alt: "Niejhay and Lhyn in front of the church altar, Lhyn holding a bouquet of red roses" },
+  { src: "assets/gallery/gallery-5.jpg", alt: "Niejhay and Lhyn smiling together inside the church" },
+  { src: "assets/gallery/gallery-6.jpg", alt: "Niejhay and Lhyn posing together at a restaurant" }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -97,6 +98,18 @@ function initMusic(){
       toggle.setAttribute("aria-label", "Play background music");
     }
   });
+
+  // Also start music the moment a guest interacts with the page at all —
+  // scrolling (in addition to tapping "Open Invitation" — see initOpening).
+  // On mobile, a scroll begins with a touch, and browsers count touches
+  // as a real user gesture, so this is allowed to start audio with sound
+  // too. Desktop mouse-wheel scrolling alone does NOT count as a gesture
+  // per browser autoplay rules (this is intentional on their part, to
+  // stop accidental scrolling from triggering sound) — the click handler
+  // on "Open Invitation" remains the reliable path there.
+  // { once: true } means each of these only fires the first time.
+  window.addEventListener("touchstart", () => playMusic(), { once: true, passive: true });
+  window.addEventListener("scroll", () => playMusic(), { once: true, passive: true });
 }
 
 function playMusic(){
