@@ -7,9 +7,11 @@ A mobile-first, single-page wedding invitation. Plain HTML/CSS/JS — no build s
 ├── index.html
 ├── style.css
 ├── script.js
+├── google-apps-script.gs   (backend for the RSVP + guest wishes forms)
 ├── assets/
 │   ├── wedding-video.mp4   (opening monogram animation, compressed for mobile)
 │   ├── couple-photo.jpg
+│   ├── entourage-1.jpg / entourage-2.jpg
 │   └── monogram.png
 └── README.md
 ```
@@ -26,28 +28,23 @@ The opening screen uses `assets/wedding-video.mp4`. It's already compressed (720
 
 Replace `assets/couple-photo.jpg` with your preferred photo (same filename), or update the `src` attributes in `index.html` (used in the hero photo section and the gallery section — two places).
 
-## 3. Change the RSVP link
+## 3. Connect the RSVP + Guest Wishes forms to a Google Sheet
 
-Open `script.js` and edit:
+Both forms (`#rsvp` and `#wishes`) are built directly into the site — guests never leave the page. Out of the box they'll show a thank-you message but won't save anywhere; to actually collect responses into a spreadsheet, wire up the included Apps Script backend (free, no server needed, ~5 minutes):
 
-```js
-rsvpUrl: "YOUR_RSVP_LINK_HERE"
-```
+1. Create a new spreadsheet at [sheets.google.com](https://sheets.google.com).
+2. In the sheet, go to **Extensions > Apps Script**, delete the starter code, and paste in the entire contents of `google-apps-script.gs`.
+3. Click **Deploy > New deployment**, choose type **Web app**, set "Execute as" to **Me** and "Who has access" to **Anyone**, then click **Deploy** and authorize it.
+4. Copy the Web app URL it gives you (`https://script.google.com/macros/s/.../exec`).
+5. In `index.html`, paste that URL into the `data-endpoint` attribute of **both** `<form id="rsvpForm" ...>` and `<form id="wishesForm" ...>`, replacing `YOUR_FORM_ENDPOINT_HERE`.
 
-Then open `index.html`, find the RSVP section (`id="rsvp"`), and update the button's `href`:
+That's it — submissions will create "RSVP Responses" and "Guest Wishes" tabs in your spreadsheet automatically, with a new row per submission. Full details and troubleshooting are in the comments at the top of `google-apps-script.gs`.
 
-```html
-<a class="btn btn--gold" href="YOUR_RSVP_LINK_HERE" ...>RSVP Now</a>
-```
+If you'd rather use a different backend (Formspree, Firebase, etc.), the forms already `POST` as standard `FormData` to whatever URL you put in `data-endpoint`, so any endpoint that accepts that will work.
 
-A Google Form link works well here.
+## 4. Edit the RSVP form fields (optional)
 
-## 4. Connect the "Leave a Message" form (optional)
-
-The guest wishes form works without a backend (it just shows a thank-you message locally). To actually collect messages:
-
-1. Create a free endpoint with [Formspree](https://formspree.io), a Google Apps Script Web App, or Firebase.
-2. In `index.html`, find `<form id="wishesForm" data-endpoint="YOUR_FORM_ENDPOINT_HERE">` and replace the placeholder with your endpoint URL.
+The RSVP form asks for name, attendance, guest count, meal preference, contact info, and an optional message. To add, remove, or relabel a field, edit the `#rsvp` section in `index.html` — and add a matching column to the `RSVP_HEADERS` array in `google-apps-script.gs` so new fields get saved too.
 
 ## 5. Edit wedding information
 
@@ -62,8 +59,7 @@ const WEDDING = {
   ceremony: "Minor Basilica and Shrine Parish of Our Lady of the Rosary of Orani",
   reception: "Clubhouse Coastal Grove",
   location: "Kaparangan, Orani, Bataan",
-  dressCode: "Midnight Blue",
-  rsvpUrl: "YOUR_RSVP_LINK_HERE"
+  dressCode: "Midnight Blue"
 };
 ```
 

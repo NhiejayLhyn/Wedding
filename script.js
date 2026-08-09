@@ -15,8 +15,7 @@ const WEDDING = {
   ceremony: "Minor Basilica and Shrine Parish of Our Lady of the Rosary of Orani",
   reception: "Clubhouse Coastal Grove",
   location: "Kaparangan, Orani, Bataan",
-  dressCode: "Midnight Blue",
-  rsvpUrl: "YOUR_RSVP_LINK_HERE" // <-- replace with your Google Form / RSVP link
+  dressCode: "Midnight Blue"
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initCountdown();
   initReveal();
+  initRsvpForm();
   initWishesForm();
 });
 
@@ -165,14 +165,23 @@ function initReveal(){
 }
 
 /* ---------------------------------------------------------
-   Guest wishes form
-   No backend is included by default. Set the form's
-   data-endpoint attribute (in index.html) to a Formspree,
-   Google Apps Script, or Firebase endpoint to make this live.
+   RSVP + Guest wishes forms
+   Both post to the same Google Apps Script Web App endpoint
+   (see google-apps-script.gs + README for setup). Set the
+   data-endpoint attribute on each <form> in index.html once
+   you've deployed your script.
    --------------------------------------------------------- */
+function initRsvpForm(){
+  bindFormSubmit("rsvpForm", "rsvpStatus", "Thank you! Your RSVP has been received.");
+}
+
 function initWishesForm(){
-  const form = document.getElementById("wishesForm");
-  const status = document.getElementById("wishesStatus");
+  bindFormSubmit("wishesForm", "wishesStatus", "Thank you for your kind wishes!");
+}
+
+function bindFormSubmit(formId, statusId, successMessage){
+  const form = document.getElementById(formId);
+  const status = document.getElementById(statusId);
   if (!form) return;
 
   form.addEventListener("submit", async (e) => {
@@ -180,7 +189,7 @@ function initWishesForm(){
     const endpoint = form.dataset.endpoint;
 
     if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
-      status.textContent = "Thank you! (Connect a form endpoint in script.js/index.html to save messages.)";
+      status.textContent = "Thank you! (Connect a form endpoint — see google-apps-script.gs — to save responses.)";
       form.reset();
       return;
     }
@@ -195,7 +204,7 @@ function initWishesForm(){
         body: data
       });
       if (res.ok) {
-        status.textContent = "Thank you for your kind wishes!";
+        status.textContent = successMessage;
         form.reset();
       } else {
         status.textContent = "Something went wrong. Please try again.";
