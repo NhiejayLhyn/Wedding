@@ -28,12 +28,12 @@ const WEDDING = {
    --------------------------------------------------------- */
 const GALLERY = [
   { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/1.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/2.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/3.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/4.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/5.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/6.jpg", alt: "Niejhay and Lhyn smiling together" }
+  { src: "assets/gallery/1.jpeg", alt: "Niejhay and Lhyn smiling together" },
+  { src: "assets/gallery/2.jpeg", alt: "Niejhay and Lhyn smiling together" },
+  { src: "assets/gallery/3.jpeg", alt: "Niejhay and Lhyn smiling together" },
+  { src: "assets/gallery/4.jpeg", alt: "Niejhay and Lhyn smiling together" },
+  { src: "assets/gallery/5.jpeg", alt: "Niejhay and Lhyn smiling together" },
+  { src: "assets/gallery/6.jpeg", alt: "Niejhay and Lhyn smiling together" }
 // { src: "assets/gallery/photo-2.jpg", alt: "Describe this photo" },
 ];
 
