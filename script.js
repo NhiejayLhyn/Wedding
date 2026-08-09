@@ -1,5 +1,5 @@
 /* =========================================================
-   Nhiejay & Lhyn — Wedding Invitation
+   Niejhay & Lhyn — Wedding Invitation
    Vanilla JS — countdown, nav, reveal, opening transition
    ========================================================= */
 
@@ -8,14 +8,15 @@
    Update these values to change the wedding details site-wide.
    --------------------------------------------------------- */
 const WEDDING = {
-  groom: "Nhiejay Lintag",
+  groom: "Niejhay Lintag",
   bride: "Lhyn Manalansan",
   date: "August 29, 2026",
   dateTime: "2026-08-29T09:00:00+08:00", // ISO datetime, Philippine Time (UTC+8)
   ceremony: "Minor Basilica and Shrine Parish of Our Lady of the Rosary of Orani",
   reception: "Clubhouse Coastal Grove",
   location: "Kaparangan, Orani, Bataan",
-  dressCode: "Midnight Blue"
+  dressCode: "Midnight Blue",
+  hashtag: "#NiejhayAndLhynWedding2026" // shown on the Snap & Share section
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -24,7 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initCountdown();
   initReveal();
   initRsvpForm();
-  initWishesForm();
+  initSnapShare();
+  initMusic();
 });
 
 /* ---------------------------------------------------------
@@ -46,6 +48,55 @@ function initOpening(){
   if (openBtn && invitation) {
     openBtn.addEventListener("click", () => {
       invitation.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Tapping "Open Invitation" is a real user gesture, so browsers
+      // will allow audio with sound to start here (unlike page-load
+      // autoplay, which they block). See initMusic() for the toggle.
+      playMusic();
+    });
+  }
+}
+
+/* ---------------------------------------------------------
+   Background music
+   Browsers block autoplay-with-sound until the guest interacts
+   with the page, so playback starts on the "Open Invitation" tap
+   (see initOpening above). The nav bar toggle lets guests mute it
+   any time afterward, or start it manually if that first attempt
+   was blocked for some reason.
+   --------------------------------------------------------- */
+function initMusic(){
+  const audio = document.getElementById("bgMusic");
+  const toggle = document.getElementById("musicToggle");
+  if (!audio || !toggle) return;
+
+  audio.volume = 0.55;
+
+  toggle.addEventListener("click", () => {
+    if (audio.paused) {
+      playMusic();
+    } else {
+      audio.pause();
+      toggle.setAttribute("aria-pressed", "false");
+      toggle.setAttribute("aria-label", "Play background music");
+    }
+  });
+}
+
+function playMusic(){
+  const audio = document.getElementById("bgMusic");
+  const toggle = document.getElementById("musicToggle");
+  if (!audio) return;
+
+  const playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      if (toggle) {
+        toggle.setAttribute("aria-pressed", "true");
+        toggle.setAttribute("aria-label", "Mute background music");
+      }
+    }).catch(() => {
+      // Autoplay blocked — leave the toggle in its "off" state so the
+      // guest can start music manually with a direct tap on it.
     });
   }
 }
@@ -170,13 +221,17 @@ function initReveal(){
    (see google-apps-script.gs + README for setup). Set the
    data-endpoint attribute on each <form> in index.html once
    you've deployed your script.
+
+   NOTE: Google Apps Script Web Apps respond through a redirect
+   that browsers won't let JS read in normal CORS mode — even
+   when the request succeeds, fetch() can throw. So this uses
+   mode: "no-cors" and treats "the request didn't throw" as
+   success, rather than trying to read the response. Always
+   double-check new rows are appearing in your sheet, since this
+   approach can't surface a real server-side error message.
    --------------------------------------------------------- */
 function initRsvpForm(){
   bindFormSubmit("rsvpForm", "rsvpStatus", "Thank you! Your RSVP has been received.");
-}
-
-function initWishesForm(){
-  bindFormSubmit("wishesForm", "wishesStatus", "Thank you for your kind wishes!");
 }
 
 function bindFormSubmit(formId, statusId, successMessage){
@@ -198,19 +253,185 @@ function bindFormSubmit(formId, statusId, successMessage){
     status.textContent = "Sending…";
 
     try {
-      const res = await fetch(endpoint, {
+      await fetch(endpoint, {
         method: "POST",
-        headers: { "Accept": "application/json" },
+        mode: "no-cors",
         body: data
       });
-      if (res.ok) {
-        status.textContent = successMessage;
-        form.reset();
-      } else {
-        status.textContent = "Something went wrong. Please try again.";
-      }
+      status.textContent = successMessage;
+      form.reset();
     } catch (err) {
-      status.textContent = "Something went wrong. Please try again.";
+      status.textContent = "Something went wrong. Please check your internet connection and try again.";
     }
+  });
+}
+
+/* ---------------------------------------------------------
+   Snap & Share
+   Lets a guest take/choose a photo, then either:
+     (a) upload it to the couple's Google Drive folder via the
+         same Apps Script backend used for RSVP (see
+         google-apps-script.gs), or
+     (b) share it straight to Instagram/Facebook/Messages etc.
+         through the device's native share sheet, with the
+         wedding hashtag pre-filled as the caption.
+
+   True one-tap "auto-post to Instagram/Facebook" isn't possible
+   from a plain website — those platforms require a registered,
+   reviewed app for that. The native share sheet (Web Share API)
+   is the closest real equivalent: it's supported on most mobile
+   browsers and lets the guest pick exactly where to post with
+   the caption already filled in. On desktop browsers that don't
+   support it, sharing falls back to just copying the hashtag.
+   --------------------------------------------------------- */
+function initSnapShare(){
+  const box = document.querySelector(".snapshare__box");
+  const hashtagEl = document.getElementById("weddingHashtag");
+  const copyBtn = document.getElementById("copyHashtagBtn");
+  const fileInput = document.getElementById("snapFile");
+  const previewWrap = document.getElementById("snapPreviewWrap");
+  const previewImg = document.getElementById("snapPreview");
+  const uploadBtn = document.getElementById("snapUploadBtn");
+  const shareBtn = document.getElementById("snapShareBtn");
+  const status = document.getElementById("snapStatus");
+  if (!box || !fileInput) return;
+
+  if (hashtagEl) hashtagEl.textContent = WEDDING.hashtag;
+
+  if (copyBtn) {
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(WEDDING.hashtag);
+        const original = copyBtn.textContent;
+        copyBtn.textContent = "Copied!";
+        setTimeout(() => { copyBtn.textContent = original; }, 1800);
+      } catch (err) {
+        status.textContent = `Copy this manually: ${WEDDING.hashtag}`;
+      }
+    });
+  }
+
+  let currentFile = null; // resized/compressed Blob, ready to upload or share
+
+  fileInput.addEventListener("change", async () => {
+    const raw = fileInput.files && fileInput.files[0];
+    if (!raw) return;
+
+    status.textContent = "Preparing your photo…";
+    try {
+      currentFile = await resizeImage(raw, 1600, 0.82);
+      const url = URL.createObjectURL(currentFile);
+      previewImg.src = url;
+      previewWrap.hidden = false;
+      uploadBtn.disabled = false;
+      shareBtn.disabled = false;
+      status.textContent = "";
+    } catch (err) {
+      status.textContent = "Couldn't read that photo — please try another.";
+      currentFile = null;
+    }
+  });
+
+  if (uploadBtn) {
+    uploadBtn.addEventListener("click", async () => {
+      if (!currentFile) return;
+
+      // Fall back to the RSVP form's endpoint if this section's own
+      // data-endpoint hasn't been set separately — most sites will
+      // want to use one single Apps Script deployment for everything.
+      const rsvpForm = document.getElementById("rsvpForm");
+      let endpoint = box.dataset.endpoint;
+      if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
+        endpoint = rsvpForm && rsvpForm.dataset.endpoint;
+      }
+      if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
+        status.textContent = "Thank you! (Connect a form endpoint — see google-apps-script.gs — to save photos.)";
+        return;
+      }
+
+      status.textContent = "Uploading…";
+      uploadBtn.disabled = true;
+
+      try {
+        const base64 = await blobToBase64(currentFile);
+        const data = new FormData();
+        data.append("formType", "photo");
+        data.append("fileName", `guest-photo-${Date.now()}.jpg`);
+        data.append("mimeType", "image/jpeg");
+        data.append("fileData", base64);
+
+        await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+        status.textContent = "Uploaded! Thank you for sharing.";
+      } catch (err) {
+        status.textContent = "Something went wrong. Please check your internet connection and try again.";
+      } finally {
+        uploadBtn.disabled = false;
+      }
+    });
+  }
+
+  if (shareBtn) {
+    shareBtn.addEventListener("click", async () => {
+      if (!currentFile) return;
+      const shareText = `Celebrating ${WEDDING.groom} & ${WEDDING.bride}! ${WEDDING.hashtag}`;
+      const shareFile = new File([currentFile], "wedding-photo.jpg", { type: "image/jpeg" });
+
+      if (navigator.canShare && navigator.canShare({ files: [shareFile] })) {
+        try {
+          await navigator.share({ files: [shareFile], text: shareText });
+          status.textContent = "Thanks for sharing!";
+        } catch (err) {
+          // User likely cancelled the share sheet — not an error.
+        }
+        return;
+      }
+
+      // Desktop / unsupported browsers: no direct-to-app share is
+      // possible, so make manual posting as easy as we can.
+      try {
+        await navigator.clipboard.writeText(shareText);
+        status.textContent = "Your browser can't open the share menu — caption copied! Save the photo above and paste the caption when you post it.";
+      } catch (err) {
+        status.textContent = `Save the photo above and post it with: ${shareText}`;
+      }
+    });
+  }
+}
+
+/** Resize + compress an image File/Blob in-browser via canvas, returning a JPEG Blob. */
+function resizeImage(file, maxDimension, quality){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDimension || height > maxDimension) {
+        const scale = maxDimension / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
+        "image/jpeg",
+        quality
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Image load failed")); };
+    img.src = url;
+  });
+}
+
+/** Convert a Blob to a base64 string (no data: prefix) for posting as a form field. */
+function blobToBase64(blob){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
   });
 }
