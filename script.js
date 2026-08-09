@@ -28,12 +28,12 @@ const WEDDING = {
    --------------------------------------------------------- */
 const GALLERY = [
   { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" },
-  { src: "assets/gallery/gallery-1.jpg", alt: "Niejhay giving Lhyn a piggyback ride in front of the Grotto Cross memorial" },
-  { src: "assets/gallery/gallery-2.jpg", alt: "Niejhay and Lhyn laughing together during a piggyback ride at the Grotto Cross memorial" },
-  { src: "assets/gallery/gallery-3.jpg", alt: "Niejhay and Lhyn smiling together inside the church, Lhyn holding a bouquet of red roses" },
-  { src: "assets/gallery/gallery-4.jpg", alt: "Niejhay and Lhyn in front of the church altar, Lhyn holding a bouquet of red roses" },
-  { src: "assets/gallery/gallery-5.jpg", alt: "Niejhay and Lhyn smiling together inside the church" },
-  { src: "assets/gallery/gallery-6.jpg", alt: "Niejhay and Lhyn posing together at a restaurant" }
+  { src: "assets/assets/gallery-1.jpg", alt: "Niejhay giving Lhyn a piggyback ride in front of the Grotto Cross memorial" },
+  { src: "assets/assets/gallery-2.jpg", alt: "Niejhay and Lhyn laughing together during a piggyback ride at the Grotto Cross memorial" },
+  { src: "assets/assets/gallery-3.jpg", alt: "Niejhay and Lhyn smiling together inside the church, Lhyn holding a bouquet of red roses" },
+  { src: "assets/assets/gallery-4.jpg", alt: "Niejhay and Lhyn in front of the church altar, Lhyn holding a bouquet of red roses" },
+  { src: "assets/assets/gallery-5.jpg", alt: "Niejhay and Lhyn smiling together inside the church" },
+  { src: "assets/assets/gallery-6.jpg", alt: "Niejhay and Lhyn posing together at a restaurant" }
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
