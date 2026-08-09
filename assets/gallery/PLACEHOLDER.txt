@@ -1,1 +1,0 @@
-This file just keeps the folder from being dropped by git/GitHub, which don't track empty folders. Delete it once you've added real photos here.
