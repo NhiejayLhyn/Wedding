@@ -16,7 +16,7 @@ const WEDDING = {
   reception: "Clubhouse Coastal Grove",
   location: "Kaparangan, Orani, Bataan",
   dressCode: "Midnight Blue",
-  hashtag: "#NiejhayAndLhynWedding2026" // shown on the Snap & Share section
+  hashtag: "#NIEJHAYfoundhismamahaLIN" // shown on the Snap & Share section
 };
 
 /* ---------------------------------------------------------
