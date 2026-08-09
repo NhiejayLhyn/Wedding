@@ -174,12 +174,10 @@
     </p>
 
     <div class="snapshare__box" data-endpoint="YOUR_FORM_ENDPOINT_HERE">
-      <input type="file" id="snapFile" name="snapFile" accept="image/*" capture="environment" hidden>
-      <label for="snapFile" class="btn btn--outline-dark snapshare__pick">Take or Choose a Photo</label>
+      <input type="file" id="snapFile" name="snapFile" accept="image/*" multiple hidden>
+      <label for="snapFile" class="btn btn--outline-dark snapshare__pick">Take or Choose Photos</label>
 
-      <div id="snapPreviewWrap" class="snapshare__preview" hidden>
-        <img id="snapPreview" alt="Preview of your selected photo">
-      </div>
+      <div id="snapPreviewWrap" class="snapshare__preview-grid" hidden></div>
 
       <div class="snapshare__actions">
         <button type="button" id="snapUploadBtn" class="btn btn--gold" disabled>Upload to Our Gallery</button>
@@ -187,7 +185,7 @@
       </div>
 
       <p id="snapStatus" class="snapshare__status" role="status" aria-live="polite"></p>
-      <p class="snapshare__fineprint">Sharing opens your phone's share menu so you can post directly to Instagram, Facebook, or Messages with our hashtag pre-filled.</p>
+      <p class="snapshare__fineprint">You can select several photos at once. Sharing opens your phone's share menu so you can post directly to Instagram, Facebook, or Messages with our hashtag pre-filled.</p>
     </div>
   </section>
 

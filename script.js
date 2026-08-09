@@ -298,11 +298,11 @@ function bindFormSubmit(formId, statusId, successMessage){
 
 /* ---------------------------------------------------------
    Snap & Share
-   Lets a guest take/choose a photo, then either:
-     (a) upload it to the couple's Google Drive folder via the
+   Lets a guest take/choose one or more photos, then either:
+     (a) upload them to the couple's Google Drive folder via the
          same Apps Script backend used for RSVP (see
          google-apps-script.gs), or
-     (b) share it straight to Instagram/Facebook/Messages etc.
+     (b) share them straight to Instagram/Facebook/Messages etc.
          through the device's native share sheet, with the
          wedding hashtag pre-filled as the caption.
 
@@ -320,7 +320,6 @@ function initSnapShare(){
   const copyBtn = document.getElementById("copyHashtagBtn");
   const fileInput = document.getElementById("snapFile");
   const previewWrap = document.getElementById("snapPreviewWrap");
-  const previewImg = document.getElementById("snapPreview");
   const uploadBtn = document.getElementById("snapUploadBtn");
   const shareBtn = document.getElementById("snapShareBtn");
   const status = document.getElementById("snapStatus");
@@ -341,30 +340,53 @@ function initSnapShare(){
     });
   }
 
-  let currentFile = null; // resized/compressed Blob, ready to upload or share
+  let currentFiles = []; // array of resized/compressed Blobs, ready to upload or share
+
+  function renderPreviews(){
+    previewWrap.innerHTML = "";
+    currentFiles.forEach((file, i) => {
+      const url = URL.createObjectURL(file);
+      const thumb = document.createElement("div");
+      thumb.className = "snapshare__thumb";
+      thumb.innerHTML = `
+        <img src="${url}" alt="Selected photo ${i + 1}">
+        <button type="button" class="snapshare__thumb-remove" aria-label="Remove this photo">&times;</button>
+      `;
+      thumb.querySelector(".snapshare__thumb-remove").addEventListener("click", () => {
+        currentFiles.splice(i, 1);
+        renderPreviews();
+      });
+      previewWrap.appendChild(thumb);
+    });
+
+    const hasFiles = currentFiles.length > 0;
+    previewWrap.hidden = !hasFiles;
+    uploadBtn.disabled = !hasFiles;
+    shareBtn.disabled = !hasFiles;
+    uploadBtn.textContent = currentFiles.length > 1
+      ? `Upload ${currentFiles.length} Photos to Our Gallery`
+      : "Upload to Our Gallery";
+  }
 
   fileInput.addEventListener("change", async () => {
-    const raw = fileInput.files && fileInput.files[0];
-    if (!raw) return;
+    const raw = Array.from(fileInput.files || []);
+    if (!raw.length) return;
 
-    status.textContent = "Preparing your photo…";
+    status.textContent = raw.length > 1 ? "Preparing your photos…" : "Preparing your photo…";
     try {
-      currentFile = await resizeImage(raw, 1600, 0.82);
-      const url = URL.createObjectURL(currentFile);
-      previewImg.src = url;
-      previewWrap.hidden = false;
-      uploadBtn.disabled = false;
-      shareBtn.disabled = false;
+      const resized = await Promise.all(raw.map(f => resizeImage(f, 1600, 0.82)));
+      currentFiles = currentFiles.concat(resized);
+      renderPreviews();
       status.textContent = "";
     } catch (err) {
-      status.textContent = "Couldn't read that photo — please try another.";
-      currentFile = null;
+      status.textContent = "Couldn't read one of those photos — please try again.";
     }
+    fileInput.value = ""; // allow re-selecting the same file(s) later, and lets "change" fire again for another batch
   });
 
   if (uploadBtn) {
     uploadBtn.addEventListener("click", async () => {
-      if (!currentFile) return;
+      if (!currentFiles.length) return;
 
       // Fall back to the RSVP form's endpoint if this section's own
       // data-endpoint hasn't been set separately — most sites will
@@ -379,21 +401,25 @@ function initSnapShare(){
         return;
       }
 
-      status.textContent = "Uploading…";
       uploadBtn.disabled = true;
+      const total = currentFiles.length;
 
       try {
-        const base64 = await blobToBase64(currentFile);
-        const data = new FormData();
-        data.append("formType", "photo");
-        data.append("fileName", `guest-photo-${Date.now()}.jpg`);
-        data.append("mimeType", "image/jpeg");
-        data.append("fileData", base64);
-
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
-        status.textContent = "Uploaded! Thank you for sharing.";
+        for (let i = 0; i < total; i++) {
+          status.textContent = total > 1 ? `Uploading photo ${i + 1} of ${total}…` : "Uploading…";
+          const base64 = await blobToBase64(currentFiles[i]);
+          const data = new FormData();
+          data.append("formType", "photo");
+          data.append("fileName", `guest-photo-${Date.now()}-${i + 1}.jpg`);
+          data.append("mimeType", "image/jpeg");
+          data.append("fileData", base64);
+          await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+        }
+        status.textContent = total > 1 ? `Uploaded ${total} photos! Thank you for sharing.` : "Uploaded! Thank you for sharing.";
+        currentFiles = [];
+        renderPreviews();
       } catch (err) {
-        status.textContent = "Something went wrong. Please check your internet connection and try again.";
+        status.textContent = "Something went wrong partway through. Please check your connection and try again.";
       } finally {
         uploadBtn.disabled = false;
       }
@@ -402,13 +428,13 @@ function initSnapShare(){
 
   if (shareBtn) {
     shareBtn.addEventListener("click", async () => {
-      if (!currentFile) return;
+      if (!currentFiles.length) return;
       const shareText = `Celebrating ${WEDDING.groom} & ${WEDDING.bride}! ${WEDDING.hashtag}`;
-      const shareFile = new File([currentFile], "wedding-photo.jpg", { type: "image/jpeg" });
+      const shareFiles = currentFiles.map((file, i) => new File([file], `wedding-photo-${i + 1}.jpg`, { type: "image/jpeg" }));
 
-      if (navigator.canShare && navigator.canShare({ files: [shareFile] })) {
+      if (navigator.canShare && navigator.canShare({ files: shareFiles })) {
         try {
-          await navigator.share({ files: [shareFile], text: shareText });
+          await navigator.share({ files: shareFiles, text: shareText });
           status.textContent = "Thanks for sharing!";
         } catch (err) {
           // User likely cancelled the share sheet — not an error.
@@ -420,9 +446,9 @@ function initSnapShare(){
       // possible, so make manual posting as easy as we can.
       try {
         await navigator.clipboard.writeText(shareText);
-        status.textContent = "Your browser can't open the share menu — caption copied! Save the photo above and paste the caption when you post it.";
+        status.textContent = "Your browser can't open the share menu — caption copied! Save your photo(s) above and paste the caption when you post.";
       } catch (err) {
-        status.textContent = `Save the photo above and post it with: ${shareText}`;
+        status.textContent = `Save your photo(s) above and post them with: ${shareText}`;
       }
     });
   }

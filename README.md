@@ -55,11 +55,12 @@ The RSVP form asks for name, attendance, guest count, contact info, and an optio
 
 The `#snapshare` section (replacing the old simple timeline) lets guests:
 
-- **Upload a photo** straight into your "Wedding Guest Photos" Drive folder (via the Apps Script backend above). Photos are automatically resized/compressed in the guest's browser before upload (capped at 1600px, ~80% JPEG quality) to keep it fast on mobile data.
-- **Share a photo** to Instagram, Facebook, Messages, etc. using their phone's native share sheet, with a caption built from the `WEDDING.hashtag` value pre-filled. This uses the Web Share API, supported on most mobile browsers — there's no way for a website to auto-post directly into Instagram or Facebook without a registered, reviewed app on those platforms, so the native share sheet is the closest real equivalent. On desktop or unsupported browsers, the button instead copies the caption to the clipboard so guests can paste it manually.
+- **Select multiple photos at once** — tapping "Take or Choose Photos" opens the phone's camera or gallery, and guests can multi-select several photos from their gallery in one go (camera capture is still one shot at a time, which is a phone/OS limitation, not a site one). Each selected photo shows as a thumbnail with a small × to remove it before uploading.
+- **Upload all selected photos** in one tap, straight into your "Wedding Guest Photos" Drive folder (via the Apps Script backend above) — sent one at a time in the background with a running "Uploading photo 2 of 5…" status. Each photo is automatically resized/compressed in the guest's browser first (capped at 1600px, ~80% JPEG quality) to keep it fast on mobile data.
+- **Share all selected photos** at once to Instagram, Facebook, Messages, etc. using their phone's native share sheet, with a caption built from the `WEDDING.hashtag` value pre-filled. This uses the Web Share API, supported on most mobile browsers — there's no way for a website to auto-post directly into Instagram or Facebook without a registered, reviewed app on those platforms, so the native share sheet is the closest real equivalent. On desktop or unsupported browsers, the button instead copies the caption to the clipboard so guests can paste it manually.
 - **Copy the wedding hashtag** on its own, for guests who'd rather post independently.
 
-To change the hashtag, edit `hashtag: "#NiejhayAndLhynWedding2026"` in the `WEDDING` object at the top of `script.js` — it's read automatically into the section.
+To change the hashtag, edit `hashtag: "#NiejhayAndLhynWedding2026"` in the `WEDDING` object at the top of `script.js` — it's read automatically into the section (and into that span's text — don't edit the hashtag directly in `index.html`, since script.js overwrites it on page load).
 
 ## 6. Edit wedding information
 
