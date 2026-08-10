@@ -263,16 +263,27 @@ function initReveal(){
    approach can't surface a real server-side error message.
    --------------------------------------------------------- */
 function initRsvpForm(){
-  bindFormSubmit("rsvpForm", "rsvpStatus", "Thank you! Your RSVP has been received.");
+  bindFormSubmit("rsvpForm", "rsvpStatus", "Thank you! Your RSVP has been received.", {
+    checkDuplicate: true,
+    duplicateMessage: "Looks like we already have an RSVP under that name. If you need to change your response, please reach out to the couple directly."
+  });
 }
 
-function bindFormSubmit(formId, statusId, successMessage){
+function bindFormSubmit(formId, statusId, successMessage, opts){
+  const options = opts || {};
   const form = document.getElementById(formId);
   const status = document.getElementById(statusId);
   if (!form) return;
 
+  let isSubmitting = false;
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+    // Guards against double-click / double-tap firing two submissions
+    // before the first one finishes.
+    if (isSubmitting) return;
+
     const endpoint = form.dataset.endpoint;
 
     if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
@@ -282,18 +293,49 @@ function bindFormSubmit(formId, statusId, successMessage){
     }
 
     const data = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+
+    isSubmitting = true;
+    if (submitBtn) submitBtn.disabled = true;
     status.textContent = "Sending…";
 
     try {
-      await fetch(endpoint, {
-        method: "POST",
-        mode: "no-cors",
-        body: data
-      });
-      status.textContent = successMessage;
-      form.reset();
+      if (options.checkDuplicate) {
+        // Read the real response (instead of no-cors fire-and-forget) so
+        // we can tell a guest their RSVP was already recorded, rather
+        // than silently accepting a second copy or lying about success.
+        // NOTE: Apps Script Web Apps normally respond through a redirect
+        // that JS can't read; this works because the request body here
+        // (FormData) never triggers a CORS preflight, and Apps Script
+        // does allow the final response to be read in that case. If you
+        // ever see "Something went wrong" here even though the RSVP
+        // sheet looks fine, your deployment/browser combo may not
+        // support reading the response — you'd then need to drop
+        // checkDuplicate and go back to plain no-cors mode.
+        const res = await fetch(endpoint, { method: "POST", body: data });
+        const result = await res.json();
+        if (result && result.duplicate) {
+          status.textContent = options.duplicateMessage || "This RSVP was already submitted.";
+        } else if (result && result.ok === false) {
+          status.textContent = "Something went wrong. Please check your internet connection and try again.";
+        } else {
+          status.textContent = successMessage;
+          form.reset();
+        }
+      } else {
+        await fetch(endpoint, {
+          method: "POST",
+          mode: "no-cors",
+          body: data
+        });
+        status.textContent = successMessage;
+        form.reset();
+      }
     } catch (err) {
       status.textContent = "Something went wrong. Please check your internet connection and try again.";
+    } finally {
+      isSubmitting = false;
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
 }
