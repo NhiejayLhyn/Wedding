@@ -33,10 +33,10 @@ const GALLERY = [
   { src: "assets/gallery/gallery-3.jpg", alt: "Niejhay and Lhyn smiling together while dining at a restaurant" },
   { src: "assets/gallery/gallery-4.jpg", alt: "Niejhay and Lhyn standing together inside a church, with Lhyn holding a bouquet of red roses" },
   { src: "assets/gallery/gallery-5.jpg", alt: "Niejhay and Lhyn posing together in front of the Grotto Cross memorial" },
-  { src: "assets/gallery/gallery-6.jpg", alt: "Niejhay and Lhyn posing together at a shopping mall" }
-  { src: "assets/gallery/gallery-7.jpg", alt: "Niejhay and Lhyn playfully posing together in front of the Grotto Cross memorial" }
+  { src: "assets/gallery/gallery-6.jpg", alt: "Niejhay and Lhyn posing together at a shopping mall" },
+  { src: "assets/gallery/gallery-7.jpg", alt: "Niejhay and Lhyn playfully posing together in front of the Grotto Cross memorial" },
   { src: "assets/gallery/gallery-8.jpg", alt: "Niejhay and Lhyn smiling together while enjoying a scenic mountain view" }
-  ];
+];
 
 document.addEventListener("DOMContentLoaded", () => {
   initOpening();
