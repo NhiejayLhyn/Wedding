@@ -286,7 +286,7 @@ function bindFormSubmit(formId, statusId, successMessage, opts){
 
     const endpoint = form.dataset.endpoint;
 
-    if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
+    if (!endpoint || endpoint === "https://script.google.com/macros/s/AKfycby-TQHyM-8qvkkJQVbPpMEMi5qSR6QJcga-lsAqC12jmJh33FX3-Oh2INZt3fzkDX3a/exec") {
       status.textContent = "Thank you! (Connect a form endpoint — see google-apps-script.gs — to save responses.)";
       form.reset();
       return;
@@ -437,10 +437,10 @@ function initSnapShare(){
       // want to use one single Apps Script deployment for everything.
       const rsvpForm = document.getElementById("rsvpForm");
       let endpoint = box.dataset.endpoint;
-      if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
+      if (!endpoint || endpoint === "https://script.google.com/macros/s/AKfycby-TQHyM-8qvkkJQVbPpMEMi5qSR6QJcga-lsAqC12jmJh33FX3-Oh2INZt3fzkDX3a/exec") {
         endpoint = rsvpForm && rsvpForm.dataset.endpoint;
       }
-      if (!endpoint || endpoint === "YOUR_FORM_ENDPOINT_HERE") {
+      if (!endpoint || endpoint === "https://script.google.com/macros/s/AKfycby-TQHyM-8qvkkJQVbPpMEMi5qSR6QJcga-lsAqC12jmJh33FX3-Oh2INZt3fzkDX3a/exec") {
         status.textContent = "Thank you! (Connect a form endpoint — see google-apps-script.gs — to save photos.)";
         return;
       }
