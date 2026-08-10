@@ -421,7 +421,7 @@ function initSnapShare(){
     // Process each photo independently: one unreadable file (e.g. an
     // iPhone HEIC photo most browsers can't decode) shouldn't throw
     // away the rest of a multi-photo selection.
-    const results = await Promise.allSettled(raw.map(f => resizeImage(f, 1600, 0.82)));
+    const results = await Promise.allSettled(raw.map(f => resizeImage(f, 1280, 0.78)));
 
     const succeeded = [];
     let heicCount = 0;
@@ -490,21 +490,53 @@ function initSnapShare(){
 
       uploadBtn.disabled = true;
       const total = currentFiles.length;
+      const stamp = Date.now();
+      let done = 0;
+      let failed = 0;
+
+      // Upload a few photos at once instead of one-at-a-time — a single
+      // guest's whole batch shouldn't queue behind Apps Script's
+      // per-request latency. CONCURRENCY caps how many are in flight
+      // together so we don't hammer the endpoint or the guest's
+      // connection all at once.
+      const CONCURRENCY = 3;
+
+      async function uploadOne(i){
+        const base64 = await blobToBase64(currentFiles[i]);
+        const data = new FormData();
+        data.append("formType", "photo");
+        data.append("fileName", `guest-photo-${stamp}-${i + 1}.jpg`);
+        data.append("mimeType", "image/jpeg");
+        data.append("fileData", base64);
+        await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+      }
+
+      async function worker(queue){
+        while (queue.length) {
+          const i = queue.shift();
+          try {
+            await uploadOne(i);
+          } catch (err) {
+            failed++;
+          } finally {
+            done++;
+            status.textContent = total > 1 ? `Uploaded ${done} of ${total} photos…` : "Uploading…";
+          }
+        }
+      }
 
       try {
-        for (let i = 0; i < total; i++) {
-          status.textContent = total > 1 ? `Uploading photo ${i + 1} of ${total}…` : "Uploading…";
-          const base64 = await blobToBase64(currentFiles[i]);
-          const data = new FormData();
-          data.append("formType", "photo");
-          data.append("fileName", `guest-photo-${Date.now()}-${i + 1}.jpg`);
-          data.append("mimeType", "image/jpeg");
-          data.append("fileData", base64);
-          await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+        const queue = currentFiles.map((_, i) => i);
+        const workers = Array.from({ length: Math.min(CONCURRENCY, total) }, () => worker(queue));
+        await Promise.all(workers);
+
+        if (failed) {
+          status.textContent = `Uploaded ${total - failed} of ${total} photos. ${failed} didn't make it through — please check your connection and try again for those.`;
+        } else {
+          status.textContent = total > 1 ? `Uploaded ${total} photos! Thank you for sharing.` : "Uploaded! Thank you for sharing.";
+          currentFiles = [];
+          renderPreviews();
         }
-        status.textContent = total > 1 ? `Uploaded ${total} photos! Thank you for sharing.` : "Uploaded! Thank you for sharing.";
-        currentFiles = [];
-        renderPreviews();
       } catch (err) {
         status.textContent = "Something went wrong partway through. Please check your connection and try again.";
       } finally {
