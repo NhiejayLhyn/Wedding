@@ -143,6 +143,18 @@ To add a photo:
 
 Photos display in the order listed. There's no hard limit on how many you add, but for guests on mobile data, keep individual files reasonably sized (compress large phone photos to roughly 1500px on the long side / under ~500 KB each if you can — most photo apps or [squoosh.app](https://squoosh.app) can do this in a couple of taps).
 
+## 13. Attire guide
+
+The Dress Code section shows `assets/attire-guide.jpg` (an illustration of the suggested semi-formal look) plus a 5-color palette (`.dresscode__palette` in `index.html`) sampled directly from that illustration. To change either:
+
+- **Replace the illustration:** swap `assets/attire-guide.jpg` for a new file (same filename), or update the `src` in the `#dresscode` section of `index.html`.
+- **Replace the palette:** edit the five `--swatch:#......` hex values on the `.dresscode__swatch` spans in `index.html`. Pick colors that match whatever guide image you're using — an eyedropper tool in any image editor works, or ask for help sampling them.
+- The heading ("Semi-Formal") and note text are separate lines just above — edit those directly if the dress code itself changes (not just the colors).
+
+## 14. Gift Guide section
+
+The `#gifts` section is a short, optional note that monetary gifts are welcome — no registry or payment details were provided, so none were added. If the couple wants to include a specific payment method (GCash number, bank details, etc.), add that as another line in the `.gifts__note` paragraph in `index.html`; consider whether you want that visible to any visitor or only shared privately with confirmed guests, since this file is public if hosted on a public URL.
+
 ## Notes
 
 - No RSVP deadline, program schedule, or contact numbers were provided, so none were invented — add them if/when the couple decides on them. A placeholder hashtag was added for Snap & Share (`#NiejhayAndLhynWedding2026`) — change it in `script.js` (see section 6) to whatever the couple prefers.

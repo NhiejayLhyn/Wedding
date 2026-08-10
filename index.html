@@ -84,8 +84,8 @@
     <a href="#invitation" data-nav>Home</a>
     <a href="#story" data-nav>Our Story</a>
     <a href="#day" data-nav>The Day</a>
-    <a href="#dresscode" data-nav>Attire</a>
-    <a href="#dresscode" data-nav>Gift Guide</a>
+    <a href="#dresscode" data-nav>Dress Code</a>
+    <a href="#gifts" data-nav>Gifts</a>
     <a href="#rsvp" data-nav>RSVP</a>
   </nav>
 </header>
@@ -103,7 +103,7 @@
         <p class="invite__parents-names">Mr. Oscar P. Manalansan ✞ &amp; Mrs. Florencia C. Manalansan</p>
       </div>
 
-      <div class="invite__line" style="margin-top: 40px;"> We joyfully invite you to celebrate our wedding </div>
+      <div class="invite__line">We joyfully invite you to celebrate our wedding</div>
 
       <div class="arc-divider" aria-hidden="true">
         <svg viewBox="0 0 200 40" preserveAspectRatio="none"><path d="M0 2 C 50 40, 150 40, 200 2" /></svg>
@@ -170,7 +170,7 @@
     <p class="snapshare__note">Got a great shot of the celebration? Upload it straight to our shared gallery, or share it on your own feed — just tag it so we can find it too.</p>
 
     <p class="snapshare__hashtag">
-      <span id="weddingHashtag">#NIEJHAYfoundhismamahaLHYN</span>
+      <span id="weddingHashtag">#NIEJHAYfoundhismamahaLIN</span>
       <button type="button" id="copyHashtagBtn" class="btn btn--outline-dark btn--small">Copy</button>
     </p>
 
@@ -240,18 +240,34 @@
     <!-- ===================== DRESS CODE ===================== -->
   <section id="dresscode" class="dresscode reveal-on-scroll">
     <p class="eyebrow eyebrow--light">Attire</p>
-     <img
-    src="assets/dress-code.jpg"
-    alt="Midnight Blue semi-formal attire"
-    class="dresscode__image"
-    <p class="dresscode__note"></p>
+    <h2 class="section-title section-title--light">Semi-Formal</h2>
+    <p class="dresscode__note">We kindly invite our guests to dress in Semi-Formal, in shades of blue as shown below.</p>
+
+    <figure class="dresscode__guide">
+      <img src="assets/attire-guide.jpg" alt="Semi-formal attire guide: man in a light blue button-down shirt and navy trousers, woman in a floor-length navy halter gown" loading="lazy" width="930" height="1400">
+    </figure>
+
+    <div class="dresscode__palette" aria-label="Suggested color palette">
+      <span class="dresscode__swatch" style="--swatch:#172737"></span>
+      <span class="dresscode__swatch" style="--swatch:#1E3152"></span>
+      <span class="dresscode__swatch" style="--swatch:#31467B"></span>
+      <span class="dresscode__swatch" style="--swatch:#8EB4E1"></span>
+      <span class="dresscode__swatch" style="--swatch:#DAE3F4"></span>
+    </div>
+  </section>
+
+  <!-- ===================== GIFT GUIDE ===================== -->
+  <section id="gifts" class="gifts reveal-on-scroll">
+    <p class="eyebrow">Gift Guide</p>
+    <h2 class="section-title">With Love, No Gifts Needed</h2>
+    <p class="gifts__note">Your presence at our wedding is the greatest gift of all. Should you wish to give something more, a monetary gift would be highly appreciated as we begin this next chapter together.</p>
   </section>
 
   <!-- ===================== RSVP ===================== -->
   <section id="rsvp" class="rsvp reveal-on-scroll">
     <p class="eyebrow eyebrow--light">RSVP</p>
     <h2 class="section-title section-title--light">Join Our Celebration</h2>
-    <p class="rsvp__note">We would be honored to celebrate this special day with you. Kindly respond by <strong>August 20, 2026</strong>.</p>
+    <p class="rsvp__note">We would be honored to celebrate this special day with you. Kindly respond by <strong>August 1, 2026</strong>.</p>
 
     <form id="rsvpForm" class="rsvp__form" data-endpoint="https://script.google.com/macros/s/AKfycby-TQHyM-8qvkkJQVbPpMEMi5qSR6QJcga-lsAqC12jmJh33FX3-Oh2INZt3fzkDX3a/exec">
       <input type="hidden" name="formType" value="rsvp">
