@@ -417,14 +417,57 @@ function initSnapShare(){
     if (!raw.length) return;
 
     status.textContent = raw.length > 1 ? "Preparing your photos…" : "Preparing your photo…";
-    try {
-      const resized = await Promise.all(raw.map(f => resizeImage(f, 1600, 0.82)));
-      currentFiles = currentFiles.concat(resized);
-      renderPreviews();
+
+    // Process each photo independently: one unreadable file (e.g. an
+    // iPhone HEIC photo most browsers can't decode) shouldn't throw
+    // away the rest of a multi-photo selection.
+    const results = await Promise.allSettled(raw.map(f => resizeImage(f, 1600, 0.82)));
+
+    const succeeded = [];
+    let heicCount = 0;
+    const otherFailures = []; // { name, type, size, error }
+
+    results.forEach((result, i) => {
+      if (result.status === "fulfilled") {
+        succeeded.push(result.value);
+      } else if (isLikelyHeic_(raw[i])) {
+        heicCount++;
+      } else {
+        otherFailures.push({
+          name: raw[i].name || "(unnamed)",
+          type: raw[i].type || "(unknown type)",
+          size: raw[i].size,
+          error: result.reason && result.reason.message
+        });
+      }
+    });
+
+    currentFiles = currentFiles.concat(succeeded);
+    renderPreviews();
+
+    if (!heicCount && !otherFailures.length) {
       status.textContent = "";
-    } catch (err) {
-      status.textContent = "Couldn't read one of those photos — please try again.";
+    } else {
+      const parts = [];
+      if (succeeded.length) {
+        parts.push(`Added ${succeeded.length} photo${succeeded.length > 1 ? "s" : ""}.`);
+      }
+      if (heicCount) {
+        parts.push(`${heicCount} photo${heicCount > 1 ? "s" : ""} couldn't be read — iPhone "HEIC" photos aren't supported here. In your phone's Camera settings, switch Formats to "Most Compatible" (saves as JPG), or choose an existing JPG/PNG instead.`);
+      }
+      if (otherFailures.length) {
+        // Temporary diagnostic detail (file type/size/error) shown right
+        // on the page so the failure can be identified from a phone
+        // without needing remote devtools. Safe to trim back to a plain
+        // "please try again" once the cause is confirmed.
+        const detail = otherFailures
+          .map(f => `${f.name} — ${f.type}, ${(f.size / 1024).toFixed(0)}KB${f.error ? `, ${f.error}` : ""}`)
+          .join(" | ");
+        parts.push(`${otherFailures.length} photo${otherFailures.length > 1 ? "s" : ""} couldn't be read (${detail}).`);
+      }
+      status.textContent = parts.join(" ");
     }
+
     fileInput.value = ""; // allow re-selecting the same file(s) later, and lets "change" fire again for another batch
   });
 
@@ -498,8 +541,56 @@ function initSnapShare(){
   }
 }
 
+/** Rough check for HEIC/HEIF (default iPhone photo format), which most
+ *  non-Safari browsers can't decode client-side. Checked by MIME type
+ *  first since that's reliable when present; falls back to the file
+ *  extension because some browsers report HEIC files with an empty
+ *  or generic MIME type. */
+function isLikelyHeic_(file){
+  const type = (file.type || "").toLowerCase();
+  if (type.includes("heic") || type.includes("heif")) return true;
+  if (!type) {
+    const name = (file.name || "").toLowerCase();
+    return name.endsWith(".heic") || name.endsWith(".heif");
+  }
+  return false;
+}
+
 /** Resize + compress an image File/Blob in-browser via canvas, returning a JPEG Blob. */
-function resizeImage(file, maxDimension, quality){
+async function resizeImage(file, maxDimension, quality){
+  // Prefer createImageBitmap: it decodes a somewhat wider range of
+  // formats than an <img> element in some browsers. Fall back to the
+  // <img>-based path (below) if it's unavailable or fails.
+  let bitmap = null;
+  if (window.createImageBitmap) {
+    try {
+      bitmap = await createImageBitmap(file);
+    } catch (err) {
+      bitmap = null; // fall through to the <img>-based approach
+    }
+  }
+
+  if (bitmap) {
+    let { width, height } = bitmap;
+    if (width > maxDimension || height > maxDimension) {
+      const scale = maxDimension / Math.max(width, height);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
+        "image/jpeg",
+        quality
+      );
+    });
+  }
+
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
