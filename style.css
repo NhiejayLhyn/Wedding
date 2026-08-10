@@ -819,6 +819,7 @@ a{ color: inherit; text-decoration: none; }
 }
 .dresscode__guide img{
   width: 100%;
+  height: auto;
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   background: #fff;
