@@ -384,7 +384,7 @@ function initSnapShare(){
     });
   }
 
-  let currentFiles = []; // array of resized/compressed Blobs, ready to upload or share
+  let currentFiles = []; // array of selected Files, ready to upload or share as-is
 
   function renderPreviews(){
     previewWrap.innerHTML = "";
@@ -416,55 +416,29 @@ function initSnapShare(){
     const raw = Array.from(fileInput.files || []);
     if (!raw.length) return;
 
-    status.textContent = raw.length > 1 ? "Preparing your photos…" : "Preparing your photo…";
-
-    // Process each photo independently: one unreadable file (e.g. an
-    // iPhone HEIC photo most browsers can't decode) shouldn't throw
-    // away the rest of a multi-photo selection.
-    const results = await Promise.allSettled(raw.map(f => resizeImage(f, 1280, 0.78)));
-
+    // No resizing/compression — files are used exactly as selected.
     const succeeded = [];
     let heicCount = 0;
-    const otherFailures = []; // { name, type, size, error }
 
-    results.forEach((result, i) => {
-      if (result.status === "fulfilled") {
-        succeeded.push(result.value);
-      } else if (isLikelyHeic_(raw[i])) {
-        heicCount++;
+    raw.forEach((f) => {
+      if (isLikelyHeic_(f)) {
+        heicCount++; // browsers generally can't preview/display these
       } else {
-        otherFailures.push({
-          name: raw[i].name || "(unnamed)",
-          type: raw[i].type || "(unknown type)",
-          size: raw[i].size,
-          error: result.reason && result.reason.message
-        });
+        succeeded.push(f);
       }
     });
 
     currentFiles = currentFiles.concat(succeeded);
     renderPreviews();
 
-    if (!heicCount && !otherFailures.length) {
+    if (!heicCount) {
       status.textContent = "";
     } else {
       const parts = [];
       if (succeeded.length) {
         parts.push(`Added ${succeeded.length} photo${succeeded.length > 1 ? "s" : ""}.`);
       }
-      if (heicCount) {
-        parts.push(`${heicCount} photo${heicCount > 1 ? "s" : ""} couldn't be read — iPhone "HEIC" photos aren't supported here. In your phone's Camera settings, switch Formats to "Most Compatible" (saves as JPG), or choose an existing JPG/PNG instead.`);
-      }
-      if (otherFailures.length) {
-        // Temporary diagnostic detail (file type/size/error) shown right
-        // on the page so the failure can be identified from a phone
-        // without needing remote devtools. Safe to trim back to a plain
-        // "please try again" once the cause is confirmed.
-        const detail = otherFailures
-          .map(f => `${f.name} — ${f.type}, ${(f.size / 1024).toFixed(0)}KB${f.error ? `, ${f.error}` : ""}`)
-          .join(" | ");
-        parts.push(`${otherFailures.length} photo${otherFailures.length > 1 ? "s" : ""} couldn't be read (${detail}).`);
-      }
+      parts.push(`${heicCount} photo${heicCount > 1 ? "s" : ""} skipped — iPhone "HEIC" photos aren't supported here. In your phone's Camera settings, switch Formats to "Most Compatible" (saves as JPG), or choose an existing JPG/PNG instead.`);
       status.textContent = parts.join(" ");
     }
 
@@ -502,11 +476,13 @@ function initSnapShare(){
       const CONCURRENCY = 3;
 
       async function uploadOne(i){
-        const base64 = await blobToBase64(currentFiles[i]);
+        const file = currentFiles[i];
+        const base64 = await blobToBase64(file);
+        const ext = (file.name && file.name.includes(".")) ? file.name.slice(file.name.lastIndexOf(".")) : ".jpg";
         const data = new FormData();
         data.append("formType", "photo");
-        data.append("fileName", `guest-photo-${stamp}-${i + 1}.jpg`);
-        data.append("mimeType", "image/jpeg");
+        data.append("fileName", file.name || `guest-photo-${stamp}-${i + 1}${ext}`);
+        data.append("mimeType", file.type || "image/jpeg");
         data.append("fileData", base64);
         await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
       }
@@ -549,7 +525,7 @@ function initSnapShare(){
     shareBtn.addEventListener("click", async () => {
       if (!currentFiles.length) return;
       const shareText = `Celebrating ${WEDDING.groom} & ${WEDDING.bride}! ${WEDDING.hashtag}`;
-      const shareFiles = currentFiles.map((file, i) => new File([file], `wedding-photo-${i + 1}.jpg`, { type: "image/jpeg" }));
+      const shareFiles = currentFiles.map((file, i) => new File([file], file.name || `wedding-photo-${i + 1}.jpg`, { type: file.type || "image/jpeg" }));
 
       if (navigator.canShare && navigator.canShare({ files: shareFiles })) {
         try {
@@ -586,67 +562,6 @@ function isLikelyHeic_(file){
     return name.endsWith(".heic") || name.endsWith(".heif");
   }
   return false;
-}
-
-/** Resize + compress an image File/Blob in-browser via canvas, returning a JPEG Blob. */
-async function resizeImage(file, maxDimension, quality){
-  // Prefer createImageBitmap: it decodes a somewhat wider range of
-  // formats than an <img> element in some browsers. Fall back to the
-  // <img>-based path (below) if it's unavailable or fails.
-  let bitmap = null;
-  if (window.createImageBitmap) {
-    try {
-      bitmap = await createImageBitmap(file);
-    } catch (err) {
-      bitmap = null; // fall through to the <img>-based approach
-    }
-  }
-
-  if (bitmap) {
-    let { width, height } = bitmap;
-    if (width > maxDimension || height > maxDimension) {
-      const scale = maxDimension / Math.max(width, height);
-      width = Math.round(width * scale);
-      height = Math.round(height * scale);
-    }
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
-    bitmap.close();
-    return new Promise((resolve, reject) => {
-      canvas.toBlob(
-        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
-        "image/jpeg",
-        quality
-      );
-    });
-  }
-
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    const url = URL.createObjectURL(file);
-    img.onload = () => {
-      let { width, height } = img;
-      if (width > maxDimension || height > maxDimension) {
-        const scale = maxDimension / Math.max(width, height);
-        width = Math.round(width * scale);
-        height = Math.round(height * scale);
-      }
-      const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
-      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
-      URL.revokeObjectURL(url);
-      canvas.toBlob(
-        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
-        "image/jpeg",
-        quality
-      );
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Image load failed")); };
-    img.src = url;
-  });
 }
 
 /** Convert a Blob to a base64 string (no data: prefix) for posting as a form field. */
