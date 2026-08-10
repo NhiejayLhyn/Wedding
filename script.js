@@ -27,7 +27,6 @@ const WEDDING = {
    for accessibility (what's happening in the photo).
    --------------------------------------------------------- */
 const GALLERY = [
-  { src: "assets/couple-photo.jpg", alt: "Niejhay and Lhyn smiling together" },
   { src: "assets/gallery/gallery-1.jpg", alt: "Niejhay giving Lhyn a piggyback ride in front of the Grotto Cross memorial" },
   { src: "assets/gallery/gallery-2.jpg", alt: "Niejhay and Lhyn laughing together during a piggyback ride at the Grotto Cross memorial" },
   { src: "assets/gallery/gallery-3.jpg", alt: "Niejhay and Lhyn smiling together inside the church, Lhyn holding a bouquet of red roses" },
