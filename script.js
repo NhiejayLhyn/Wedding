@@ -384,7 +384,7 @@ function initSnapShare(){
     });
   }
 
-  let currentFiles = []; // array of selected Files, ready to upload or share as-is
+  let currentFiles = []; // array of resized/compressed Blobs, ready to upload or share
 
   function renderPreviews(){
     previewWrap.innerHTML = "";
@@ -406,7 +406,7 @@ function initSnapShare(){
     const hasFiles = currentFiles.length > 0;
     previewWrap.hidden = !hasFiles;
     uploadBtn.disabled = !hasFiles;
-    shareBtn.disabled = !hasFiles;
+    if (shareBtn) shareBtn.disabled = !hasFiles;
     uploadBtn.textContent = currentFiles.length > 1
       ? `Upload ${currentFiles.length} Photos to Our Gallery`
       : "Upload to Our Gallery";
@@ -416,29 +416,60 @@ function initSnapShare(){
     const raw = Array.from(fileInput.files || []);
     if (!raw.length) return;
 
-    // No resizing/compression — files are used exactly as selected.
+    status.textContent = raw.length > 1 ? "Preparing your photos…" : "Preparing your photo…";
+
+    // Resize/compress before upload. Two reasons this matters, not just
+    // upload speed:
+    //  1. Preview thumbnails render full-size images otherwise — several
+    //     multi-MB originals decoding for on-screen previews is what was
+    //     making "preparing" feel slow, especially on a phone.
+    //  2. The upload fetch() runs in "no-cors" mode, so the site can't
+    //     see whether Apps Script actually accepted a request. Oversized
+    //     originals can silently fail server-side (payload/time limits)
+    //     while the UI still says "Uploaded!" — which is why photos were
+    //     going missing from Drive. Keeping files small avoids that.
+    // 1024px/0.72 keeps this step fast while still comfortably under
+    // Apps Script's practical payload ceiling.
+    const results = await Promise.allSettled(raw.map(f => resizeImage(f, 1024, 0.72)));
+
     const succeeded = [];
     let heicCount = 0;
+    const otherFailures = []; // { name, type, size, error }
 
-    raw.forEach((f) => {
-      if (isLikelyHeic_(f)) {
-        heicCount++; // browsers generally can't preview/display these
+    results.forEach((result, i) => {
+      if (result.status === "fulfilled") {
+        succeeded.push(result.value);
+      } else if (isLikelyHeic_(raw[i])) {
+        heicCount++;
       } else {
-        succeeded.push(f);
+        otherFailures.push({
+          name: raw[i].name || "(unnamed)",
+          type: raw[i].type || "(unknown type)",
+          size: raw[i].size,
+          error: result.reason && result.reason.message
+        });
       }
     });
 
     currentFiles = currentFiles.concat(succeeded);
     renderPreviews();
 
-    if (!heicCount) {
+    if (!heicCount && !otherFailures.length) {
       status.textContent = "";
     } else {
       const parts = [];
       if (succeeded.length) {
         parts.push(`Added ${succeeded.length} photo${succeeded.length > 1 ? "s" : ""}.`);
       }
-      parts.push(`${heicCount} photo${heicCount > 1 ? "s" : ""} skipped — iPhone "HEIC" photos aren't supported here. In your phone's Camera settings, switch Formats to "Most Compatible" (saves as JPG), or choose an existing JPG/PNG instead.`);
+      if (heicCount) {
+        parts.push(`${heicCount} photo${heicCount > 1 ? "s" : ""} couldn't be read — iPhone "HEIC" photos aren't supported here. In your phone's Camera settings, switch Formats to "Most Compatible" (saves as JPG), or choose an existing JPG/PNG instead.`);
+      }
+      if (otherFailures.length) {
+        const detail = otherFailures
+          .map(f => `${f.name} — ${f.type}, ${(f.size / 1024).toFixed(0)}KB${f.error ? `, ${f.error}` : ""}`)
+          .join(" | ");
+        parts.push(`${otherFailures.length} photo${otherFailures.length > 1 ? "s" : ""} couldn't be read (${detail}).`);
+      }
       status.textContent = parts.join(" ");
     }
 
@@ -476,13 +507,11 @@ function initSnapShare(){
       const CONCURRENCY = 3;
 
       async function uploadOne(i){
-        const file = currentFiles[i];
-        const base64 = await blobToBase64(file);
-        const ext = (file.name && file.name.includes(".")) ? file.name.slice(file.name.lastIndexOf(".")) : ".jpg";
+        const base64 = await blobToBase64(currentFiles[i]);
         const data = new FormData();
         data.append("formType", "photo");
-        data.append("fileName", file.name || `guest-photo-${stamp}-${i + 1}${ext}`);
-        data.append("mimeType", file.type || "image/jpeg");
+        data.append("fileName", `guest-photo-${stamp}-${i + 1}.jpg`);
+        data.append("mimeType", "image/jpeg");
         data.append("fileData", base64);
         await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
       }
@@ -525,7 +554,7 @@ function initSnapShare(){
     shareBtn.addEventListener("click", async () => {
       if (!currentFiles.length) return;
       const shareText = `Celebrating ${WEDDING.groom} & ${WEDDING.bride}! ${WEDDING.hashtag}`;
-      const shareFiles = currentFiles.map((file, i) => new File([file], file.name || `wedding-photo-${i + 1}.jpg`, { type: file.type || "image/jpeg" }));
+      const shareFiles = currentFiles.map((file, i) => new File([file], `wedding-photo-${i + 1}.jpg`, { type: "image/jpeg" }));
 
       if (navigator.canShare && navigator.canShare({ files: shareFiles })) {
         try {
@@ -562,6 +591,67 @@ function isLikelyHeic_(file){
     return name.endsWith(".heic") || name.endsWith(".heif");
   }
   return false;
+}
+
+/** Resize + compress an image File/Blob in-browser via canvas, returning a JPEG Blob. */
+async function resizeImage(file, maxDimension, quality){
+  // Prefer createImageBitmap: it decodes a somewhat wider range of
+  // formats than an <img> element in some browsers. Fall back to the
+  // <img>-based path (below) if it's unavailable or fails.
+  let bitmap = null;
+  if (window.createImageBitmap) {
+    try {
+      bitmap = await createImageBitmap(file);
+    } catch (err) {
+      bitmap = null; // fall through to the <img>-based approach
+    }
+  }
+
+  if (bitmap) {
+    let { width, height } = bitmap;
+    if (width > maxDimension || height > maxDimension) {
+      const scale = maxDimension / Math.max(width, height);
+      width = Math.round(width * scale);
+      height = Math.round(height * scale);
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    canvas.getContext("2d").drawImage(bitmap, 0, 0, width, height);
+    bitmap.close();
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
+        "image/jpeg",
+        quality
+      );
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDimension || height > maxDimension) {
+        const scale = maxDimension / Math.max(width, height);
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("Canvas export failed")),
+        "image/jpeg",
+        quality
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Image load failed")); };
+    img.src = url;
+  });
 }
 
 /** Convert a Blob to a base64 string (no data: prefix) for posting as a form field. */
