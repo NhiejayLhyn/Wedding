@@ -506,6 +506,8 @@ function initSnapShare(){
       // connection all at once.
       const CONCURRENCY = 3;
 
+      let lastError = null; // surfaced in the final status message, if any upload fails
+
       async function uploadOne(i){
         const base64 = await blobToBase64(currentFiles[i]);
         const data = new FormData();
@@ -513,7 +515,17 @@ function initSnapShare(){
         data.append("fileName", `guest-photo-${stamp}-${i + 1}.jpg`);
         data.append("mimeType", "image/jpeg");
         data.append("fileData", base64);
-        await fetch(endpoint, { method: "POST", mode: "no-cors", body: data });
+
+        // NOTE: deliberately NOT using mode: "no-cors" here — same reasoning
+        // as the RSVP form (see bindFormSubmit above): a plain FormData POST
+        // to an Apps Script Web App doesn't trigger a CORS preflight, so the
+        // real { ok: true/false, error } response IS readable. Without this,
+        // the UI has no way to know whether the photo actually saved.
+        const res = await fetch(endpoint, { method: "POST", body: data });
+        const result = await res.json();
+        if (!result || result.ok !== true) {
+          throw new Error((result && result.error) || "Unknown error");
+        }
       }
 
       async function worker(queue){
@@ -523,6 +535,7 @@ function initSnapShare(){
             await uploadOne(i);
           } catch (err) {
             failed++;
+            lastError = err && err.message;
           } finally {
             done++;
             status.textContent = total > 1 ? `Uploaded ${done} of ${total} photos…` : "Uploading…";
@@ -536,7 +549,8 @@ function initSnapShare(){
         await Promise.all(workers);
 
         if (failed) {
-          status.textContent = `Uploaded ${total - failed} of ${total} photos. ${failed} didn't make it through — please check your connection and try again for those.`;
+          status.textContent = `Uploaded ${total - failed} of ${total} photos. ${failed} didn't make it through — please check your connection and try again for those.` +
+            (lastError ? ` (Details: ${lastError})` : "");
         } else {
           status.textContent = total > 1 ? `Uploaded ${total} photos! Thank you for sharing.` : "Uploaded! Thank you for sharing.";
           currentFiles = [];
