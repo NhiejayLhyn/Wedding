@@ -1001,6 +1001,38 @@ a{ color: inherit; text-decoration: none; }
   opacity: 0.55;
 }
 
+/* =========================================================
+   SNAP & SHARE QR
+   ========================================================= */
+.snapshare-qr{
+  padding: var(--section-y) var(--pad);
+  text-align: center;
+  background: var(--paper);
+}
+.snapshare-qr__note{
+  max-width: 420px;
+  margin: 0 auto 28px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--charcoal);
+  opacity: 0.8;
+}
+.snapshare-qr__frame{
+  display: block;
+  width: 200px;
+  max-width: 60vw;
+  margin: 0 auto 28px;
+  padding: 12px;
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-soft);
+}
+.snapshare-qr__frame img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 @media (min-width: 540px){
   .gallery__grid{ grid-template-columns: repeat(3, 1fr); }
 }
