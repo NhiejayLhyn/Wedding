@@ -10,6 +10,6 @@
  */
 
 const guests = [
-  // { name: "Lydeth Anne Dela Cruz", table: "Table 8" },
-  // { name: "Mark Jade Dela Cruz", table: "Table 69" },
+   { name: "Lydeth Anne Dela Cruz", table: "Table 8" },
+   { name: "Mark Jade Dela Cruz", table: "Table 69" },
 ];
