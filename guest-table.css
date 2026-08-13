@@ -1,0 +1,249 @@
+/* =========================================================
+   Guest Table Lookup — uses the existing wedding design system
+   ========================================================= */
+
+.guest-table{
+  min-height: calc(100svh - 160px);
+  padding: 128px var(--pad) 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guest-table__inner{
+  width: min(100%, 620px);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.guest-table__intro{
+  max-width: 520px;
+  margin: -10px auto 30px;
+  color: rgba(42,42,40,.78);
+}
+
+.guest-table__form{
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  margin: 0 auto;
+}
+
+.guest-table__field{
+  text-align: left;
+}
+
+.guest-table__field label{
+  display: block;
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.guest-table__field input{
+  width: 100%;
+  min-height: 56px;
+  padding: 0 17px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.68);
+  color: var(--charcoal);
+  font: 500 16px/1.2 var(--sans);
+  box-shadow: 0 10px 30px -25px rgba(20,33,61,.5);
+  -webkit-appearance: none;
+}
+
+.guest-table__field input::placeholder{
+  color: rgba(42,42,40,.48);
+}
+
+.guest-table__field input:focus{
+  outline: 2px solid rgba(184,147,91,.45);
+  outline-offset: 2px;
+  border-color: var(--gold);
+}
+
+.guest-table__submit{
+  width: 100%;
+  min-height: 54px;
+  cursor: pointer;
+}
+
+.guest-table__status{
+  min-height: 24px;
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: rgba(42,42,40,.72);
+}
+
+.guest-table__result{
+  margin: 22px 0 0;
+  padding: 30px 20px;
+  border: 1px solid rgba(184,147,91,.35);
+  background: rgba(255,255,255,.48);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.guest-table__result.is-visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.guest-table__welcome{
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(24px, 7vw, 32px);
+  line-height: 1.15;
+}
+
+.guest-table__label{
+  margin: 18px 0 4px;
+  font-size: 12px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.guest-table__number{
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(46px, 14vw, 72px);
+  font-weight: 500;
+  line-height: 1;
+  margin: 4px 0 14px;
+  animation: guestTableNumberIn .45s ease both;
+}
+
+.guest-table__celebration{
+  margin: 0;
+  color: rgba(42,42,40,.75);
+  font-style: italic;
+  font-family: var(--serif);
+  font-size: 18px;
+}
+
+.guest-table__multiple-heading,
+.guest-table__not-found{
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 28px;
+}
+
+.guest-table__multiple-note,
+.guest-table__not-found-note{
+  margin: 8px auto 18px;
+  color: rgba(42,42,40,.72);
+}
+
+.guest-table__match-list{
+  display: grid;
+  gap: 9px;
+  text-align: left;
+}
+
+.guest-table__match{
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 15px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: rgba(255,255,255,.72);
+  color: var(--ink);
+  font: 600 15px/1.3 var(--sans);
+  cursor: pointer;
+  transition: border-color .2s ease, transform .2s ease, background-color .2s ease;
+}
+
+.guest-table__match:hover{
+  border-color: rgba(184,147,91,.75);
+  transform: translateY(-1px);
+}
+
+.guest-table__match:active{
+  transform: translateY(0);
+}
+
+.guest-table__retry{
+  margin-top: 10px;
+}
+
+.guest-table__try-again{
+  margin-top: 22px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: 600 12px/1.4 var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.guest-table__details{
+  margin: 34px 0 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  color: rgba(42,42,40,.65);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.guest-table__details p{
+  margin: 2px 0;
+}
+
+.guest-table__back{
+  margin-top: 2px;
+}
+
+@keyframes guestTableNumberIn{
+  from{ opacity: 0; transform: scale(.94); }
+  to{ opacity: 1; transform: scale(1); }
+}
+
+@media (min-width: 768px){
+  .guest-table{
+    min-height: calc(100vh - 170px);
+    padding-top: 150px;
+  }
+
+  .guest-table__form{
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+
+  .guest-table__submit{
+    width: auto;
+    min-width: 170px;
+  }
+
+  .guest-table__result{
+    padding: 38px 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .guest-table__result{
+    transition: none;
+  }
+
+  .guest-table__number{
+    animation: none;
+  }
+
+  .guest-table__match{
+    transition: none;
+  }
+}

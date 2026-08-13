@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Find Your Table | Niejhay &amp; Lhyn</title>
+<meta name="description" content="Find your assigned reception table for Niejhay & Lhyn's wedding.">
+<meta name="theme-color" content="#14213D">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="guest-table.css">
+</head>
+<body>
+
+<a class="skip-link" href="#guestTable">Skip to guest table lookup</a>
+
+<audio id="bgMusic" loop preload="none">
+  <source src="assets/background-music.mp3" type="audio/mpeg">
+</audio>
+
+<header class="site-nav is-shown" id="siteNav">
+  <a href="index.html#top" class="site-nav__brand" aria-label="Back to the wedding invitation">
+    <img src="assets/monogram.png" alt="" width="28" height="28">
+    <span>N&nbsp;&amp;&nbsp;L</span>
+  </a>
+
+  <div class="site-nav__right">
+    <button id="musicToggle" class="site-nav__music" type="button" aria-pressed="false" aria-label="Play background music">
+      <svg class="icon-music-on" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/></svg>
+      <svg class="icon-music-off" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="1.6"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="1.6"/><line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+
+    <button id="menuBtn" class="site-nav__toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav id="navMenu" class="site-nav__menu">
+    <a href="index.html#invitation" data-nav>Home</a>
+    <a href="index.html#story" data-nav>Our Story</a>
+    <a href="index.html#day" data-nav>The Day</a>
+    <a href="guest-table.html" data-nav aria-current="page">Find Your Table</a>
+    <a href="snap-share.html" data-nav>Snap &amp; Share</a>
+    <a href="index.html#dresscode" data-nav>Attire</a>
+    <a href="index.html#gifts" data-nav>Gifts</a>
+    <a href="index.html#rsvp" data-nav>RSVP</a>
+  </nav>
+</header>
+<div id="navScrim" class="site-nav__scrim"></div>
+
+<main id="guestTable">
+  <section class="guest-table reveal-on-scroll is-visible" aria-labelledby="guestTableTitle">
+    <div class="guest-table__inner">
+      <p class="eyebrow">Reception</p>
+      <h1 id="guestTableTitle" class="section-title">Find Your Table</h1>
+      <p class="guest-table__intro">Enter your name below and we'll help you find your assigned table.</p>
+
+      <form id="guestLookupForm" class="guest-table__form" novalidate>
+        <div class="guest-table__field">
+          <label for="guestName">Your name</label>
+          <input
+            type="search"
+            id="guestName"
+            name="guestName"
+            placeholder="Search your name..."
+            autocomplete="name"
+            autocapitalize="words"
+            enterkeyhint="search"
+            spellcheck="false"
+            aria-describedby="guestStatus"
+            required
+          >
+        </div>
+
+        <button type="submit" class="btn btn--gold guest-table__submit">
+          Find My Table
+        </button>
+      </form>
+
+      <p id="guestStatus" class="guest-table__status" role="status" aria-live="polite"></p>
+
+      <section id="guestResult" class="guest-table__result" aria-live="polite" hidden>
+        <div id="guestMatches"></div>
+        <button type="button" id="guestTryAgain" class="guest-table__try-again">
+          Search another name
+        </button>
+      </section>
+
+      <div class="guest-table__details" aria-label="Reception information">
+        <p>Reception · Coastal Grove Clubhouse</p>
+        <p>Kaparangan, Orani, Bataan</p>
+      </div>
+
+      <a href="index.html#top" class="btn btn--outline-dark guest-table__back">
+        &larr; Back to the Invitation
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <img src="assets/monogram.png" alt="" width="56" height="56" class="site-footer__mark">
+  <p class="site-footer__names">Niejhay &amp; Lhyn</p>
+  <p class="site-footer__date">August 29, 2026</p>
+  <p class="site-footer__sign">With love, Niejhay &amp; Lhyn</p>
+</footer>
+
+<script src="guests.js"></script>
+<script src="script.js"></script>
+<script src="guest-table.js"></script>
+</body>
+</html>

@@ -1285,3 +1285,14 @@ a{ color: inherit; text-decoration: none; }
   .day{ padding-left: var(--pad); padding-right: var(--pad); }
   .entourage__details{ max-width: 640px; }
 }
+
+
+/* =========================================================
+   Guest Table integration
+   ========================================================= */
+.day__actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+}
